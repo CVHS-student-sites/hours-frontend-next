@@ -15,6 +15,8 @@ import Link from "next/link"
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [activeTab, setActiveTab] = useState("student")
+  const [staffRole, setStaffRole] = useState("")
+  const [customRole, setCustomRole] = useState("")
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -75,16 +77,16 @@ export default function RegisterPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="grade">Grade Level</Label>
+                    <Label htmlFor="graduation-year">Graduation Year</Label>
                     <Select>
                       <SelectTrigger className="bg-muted/50">
-                        <SelectValue placeholder="Select your grade" />
+                        <SelectValue placeholder="Select your graduation year" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="9">9th Grade</SelectItem>
-                        <SelectItem value="10">10th Grade</SelectItem>
-                        <SelectItem value="11">11th Grade</SelectItem>
-                        <SelectItem value="12">12th Grade</SelectItem>
+                        <SelectItem value="2026">2026</SelectItem>
+                        <SelectItem value="2027">2027</SelectItem>
+                        <SelectItem value="2028">2028</SelectItem>
+                        <SelectItem value="2029">2029</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -94,7 +96,7 @@ export default function RegisterPage() {
                     <Input
                       id="student-email"
                       type="email"
-                      placeholder="john.doe@student.cvhs.edu"
+                      placeholder="jfal1234@stu.gusd.net"
                       className="bg-muted/50"
                     />
                   </div>
@@ -124,20 +126,6 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" />
-                    <Label htmlFor="terms" className="text-sm text-pretty">
-                      I agree to the{" "}
-                      <Link href="/terms" className="text-[#0084ff] hover:underline">
-                        Terms of Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link href="/privacy" className="text-[#0084ff] hover:underline">
-                        Privacy Policy
-                      </Link>
-                    </Label>
-                  </div>
-
                   <Button className="w-full bg-[#0084ff] hover:bg-[#0070e6] text-white">Create Student Account</Button>
                 </div>
               </TabsContent>
@@ -164,26 +152,30 @@ export default function RegisterPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="role">Role</Label>
-                    <Select>
+                    <Select value={staffRole} onValueChange={setStaffRole}>
                       <SelectTrigger className="bg-muted/50">
                         <SelectValue placeholder="Select your role" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="supervisor">Community Service Supervisor</SelectItem>
-                        <SelectItem value="admin">Administrator</SelectItem>
                         <SelectItem value="teacher">Teacher/Advisor</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
+                    {staffRole === "other" && (
+                      <Input
+                        id="custom-role"
+                        placeholder="Please specify your role"
+                        className="bg-muted/50 mt-2"
+                        value={customRole}
+                        onChange={e => setCustomRole(e.target.value)}
+                      />
+                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="department">Department</Label>
-                    <Input id="department" placeholder="e.g., Student Services" className="bg-muted/50" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="staff-email">School Email</Label>
-                    <Input id="staff-email" type="email" placeholder="jane.smith@cvhs.edu" className="bg-muted/50" />
+                    <Label htmlFor="staff-email">Email</Label>
+                    <Input id="staff-email" type="email" placeholder="jane.smith@abc123.com" className="bg-muted/50" />
                   </div>
 
                   <div className="space-y-2">
@@ -211,14 +203,10 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="staff-terms" />
-                    <Label htmlFor="staff-terms" className="text-sm text-pretty">
-                      I agree to the staff{" "}
-                      <Link href="/staff-terms" className="text-[#0084ff] hover:underline">
-                        Terms of Service
-                      </Link>
-                    </Label>
+                  <div className="items-center space-y-2">
+                    <Label htmlFor="verificaton-info">Verification Information</Label>
+                    <Label htmlFor="verificaton-info">Please provide how we can verify your role. </Label>
+                    <Input id="verificaton-info" type="info" placeholder="Ex: A website, professional website, LinkedIn, etc" className="bg-muted/50" />
                   </div>
 
                   <Button className="w-full bg-[#0084ff] hover:bg-[#0070e6] text-white">Request Staff Account</Button>
@@ -241,7 +229,7 @@ export default function RegisterPage() {
         <div className="mt-8 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Shield className="h-4 w-4" />
-            <span>Secure registration powered by CVHS IT</span>
+            <span>Secure registration powered by CVHS ❤️</span>
           </div>
         </div>
       </div>

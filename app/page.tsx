@@ -115,16 +115,7 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Trust indicators */}
-            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-[#0084ff]" />
-                <span>Secure & Private</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[#0084ff]" />
-                <span>CVHS Approved</span>
-              </div>
-            </div>
+            
           </div>
         </section>
 

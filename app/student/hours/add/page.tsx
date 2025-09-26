@@ -48,10 +48,6 @@ export default function AddHoursPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
           <Card>
-            <CardHeader>
-              <CardTitle>Service Details</CardTitle>
-              <CardDescription>Provide information about your community service activity</CardDescription>
-            </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -103,11 +99,6 @@ export default function AddHoursPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="supervisor">Supervisor Name *</Label>
-                <Input id="supervisor" placeholder="Jane Smith" required />
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="supervisor-email">Supervisor Email *</Label>
                 <Input id="supervisor-email" type="email" placeholder="jane.smith@organization.org" required />
               </div>
@@ -123,26 +114,7 @@ export default function AddHoursPage() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Additional Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Additional Information</CardTitle>
-              <CardDescription>Optional details to support your service hours</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="reflection">Personal Reflection</Label>
-                <Textarea
-                  id="reflection"
-                  placeholder="What did you learn from this experience? How did it impact you or the community?"
-                  className="min-h-[80px]"
-                />
-              </div>
-
-            </CardContent>
-          </Card>
-
+          
           {/* Important Notes */}
           <Alert>
             <Info className="h-4 w-4" />

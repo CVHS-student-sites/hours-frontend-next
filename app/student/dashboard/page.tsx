@@ -1,18 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { AppShell } from "@/components/layout/app-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GradientCard } from "@/components/ui/gradient-card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Plus, Clock, CheckCircle, AlertCircle, TrendingUp, Calendar, Building2 } from "lucide-react"
+import { Plus, Clock, CheckCircle, AlertCircle, TrendingUp, Calendar, Building2, Search, MoreHorizontal, Edit, Trash2, Eye, Download } from "lucide-react"
 import Link from "next/link"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { PageTransition } from "@/components/ui/page-transition"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { motion } from "framer-motion"
 
 export default function StudentDashboard() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [dateFilter, setDateFilter] = useState("all")
   // Mock data - in real app this would come from API
   const studentData = {
     name: "John Doe",
@@ -23,6 +29,61 @@ export default function StudentDashboard() {
     organizations: 3,
     requiredHours: 60,
   }
+
+// Mock data - in real app this would come from API
+  const hoursData = [
+    {
+      id: 1,
+      date: "2024-01-15",
+      organization: "Local Food Bank",
+      hours: 4.0,
+      status: "approved",
+      description: "Sorted donations and helped with food distribution",
+      supervisor: "Jane Smith",
+      approvedDate: "2024-01-16",
+    },
+    {
+      id: 2,
+      date: "2024-01-12",
+      organization: "Animal Shelter",
+      hours: 3.5,
+      status: "pending",
+      description: "Walked dogs and cleaned kennels",
+      supervisor: "Mike Johnson",
+      approvedDate: null,
+    },
+    {
+      id: 3,
+      date: "2024-01-10",
+      organization: "Community Garden",
+      hours: 2.0,
+      status: "approved",
+      description: "Planted vegetables and maintained garden beds",
+      supervisor: "Sarah Wilson",
+      approvedDate: "2024-01-11",
+    },
+    {
+      id: 4,
+      date: "2024-01-08",
+      organization: "Senior Center",
+      hours: 5.0,
+      status: "rejected",
+      description: "Helped with activities and meal service",
+      supervisor: "Tom Brown",
+      approvedDate: null,
+      rejectionReason: "Insufficient documentation provided",
+    },
+    {
+      id: 5,
+      date: "2024-01-05",
+      organization: "Library",
+      hours: 3.0,
+      status: "approved",
+      description: "Organized books and helped with reading program",
+      supervisor: "Lisa Davis",
+      approvedDate: "2024-01-06",
+    },
+  ]
 
   const recentActivity = [
     {
@@ -50,6 +111,15 @@ export default function StudentDashboard() {
       description: "Planted vegetables and maintained garden beds",
     },
   ]
+
+    const filteredData = hoursData.filter((entry) => {
+    const matchesSearch =
+      entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      entry.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === "all" || entry.status === statusFilter
+    return matchesSearch && matchesStatus
+  })
+
 
   const progressPercentage = (studentData.totalHours / studentData.requiredHours) * 100
 
@@ -198,65 +268,102 @@ export default function StudentDashboard() {
             </motion.div>
           </div>
 
-          {/* Recent Activity */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Recent Activity</CardTitle>
-                  <CardDescription>Your latest community service entries</CardDescription>
-                </div>
-                <Button asChild variant="outline">
-                  <Link href="/student/hours">View All Hours</Link>
+          <Card>
+          <CardHeader>
+            <CardTitle>Service Hours Log</CardTitle>
+            <CardDescription>All your community service entries and their approval status</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {filteredData.length === 0 ? (
+              <div className="text-center py-12">
+                <Calendar className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No hours found</h3>
+                <p className="text-muted-foreground mb-4 text-pretty">
+                  {searchTerm || statusFilter !== "all"
+                    ? "Try adjusting your filters to see more results."
+                    : "Start logging your community service hours to see them here."}
+                </p>
+                <Button asChild className="bg-[#0084ff] hover:bg-[#0070e6] text-white">
+                  <Link href="/student/hours/add">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Your First Hours
+                  </Link>
                 </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentActivity.map((activity, index) => (
-                    <motion.div
-                      key={activity.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                      whileHover={{ scale: 1.02, x: 5 }}
-                      className="flex items-center justify-between p-4 rounded-lg border bg-card/50 transition-all duration-200"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-shrink-0">
-                          {activity.status === "approved" ? (
-                            <CheckCircle className="h-5 w-5 text-green-500" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-orange-500" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-balance">{activity.organization}</p>
-                          <p className="text-sm text-muted-foreground text-pretty">{activity.description}</p>
-                          <div className="flex items-center space-x-4 mt-1">
-                            <span className="text-xs text-muted-foreground flex items-center">
-                              <Calendar className="mr-1 h-3 w-3" />
-                              {new Date(activity.date).toLocaleDateString()}
-                            </span>
-                            <span className="text-xs text-muted-foreground flex items-center">
-                              <Clock className="mr-1 h-3 w-3" />
-                              {activity.hours} hours
-                            </span>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Organization</TableHead>
+                      <TableHead>Hours</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Supervisor</TableHead>
+                      <TableHead className="w-[50px]"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredData.map((entry) => (
+                      <TableRow key={entry.id}>
+                        <TableCell className="font-medium">{new Date(entry.date).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium text-balance">{entry.organization}</p>
+                            <p className="text-sm text-muted-foreground text-pretty line-clamp-2">
+                              {entry.description}
+                            </p>
                           </div>
-                        </div>
-                      </div>
-                      <Badge variant={activity.status === "approved" ? "default" : "secondary"} className="capitalize">
-                        {activity.status}
-                      </Badge>
-                    </motion.div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                        </TableCell>
+                        <TableCell>{entry.hours}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              entry.status === "approved"
+                                ? "default"
+                                : entry.status === "pending"
+                                  ? "secondary"
+                                  : "destructive"
+                            }
+                            className="capitalize"
+                          >
+                            {entry.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm">{entry.supervisor}</TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View Details
+                              </DropdownMenuItem>
+                              {entry.status === "pending" && (
+                                <DropdownMenuItem>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit Entry
+                                </DropdownMenuItem>
+                              )}
+                              <DropdownMenuItem className="text-destructive">
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         </div>
       </PageTransition>
     </AppShell>

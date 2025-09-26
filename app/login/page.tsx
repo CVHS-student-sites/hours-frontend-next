@@ -59,7 +59,7 @@ export default function LoginPage() {
                     <Input
                       id="student-email"
                       type="email"
-                      placeholder="your.name@student.cvhs.edu"
+                      placeholder="your.name@stu.gusd.net"
                       className="bg-muted/50"
                     />
                   </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="staff-email">Email</Label>
-                    <Input id="staff-email" type="email" placeholder="your.name@cvhs.edu" className="bg-muted/50" />
+                    <Input id="staff-email" type="email" placeholder="your.name@abc123.com" className="bg-muted/50" />
                   </div>
 
                   <div className="space-y-2">
