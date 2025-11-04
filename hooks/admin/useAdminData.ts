@@ -11,6 +11,8 @@ export function useAdminData() {
   const [overviewLoading, setOverviewLoading] = useState(true)
   const [overviewError, setOverviewError] = useState<string | null>(null)
   const [initialLoading, setInitialLoading] = useState(true)
+  const [topStudents, setTopStudents] = useState<Student[]>([])
+  const [topStudentsLoading, setTopStudentsLoading] = useState(true)
 
   // Create stable fetch functions for each data type
   const fetchStudents = useCallback((params: any) => adminApi.getStudents(params), [])
@@ -69,12 +71,29 @@ export function useAdminData() {
     }
   }
 
+  // Fetch top students data
+  const fetchTopStudents = async () => {
+    setTopStudentsLoading(true)
+    try {
+      const response = await adminApi.getTopStudents(5)
+      if (response?.success && response?.data) {
+        setTopStudents(response.data.data)
+      }
+    } catch (err: any) {
+      setOverviewError(err.message || 'Failed to load top students data')
+    } finally {
+      setTopStudentsLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchOverview()
+    fetchTopStudents()
   }, [])
 
   const refetch = async () => {
     await fetchOverview()
+    await fetchTopStudents()
     studentsPagination.refetch()
     supervisorsPagination.refetch()
     pendingSupervisorsPagination.refetch()
@@ -92,6 +111,7 @@ export function useAdminData() {
     pendingSupervisorsPagination.loading || 
     hoursPagination.loading || 
     organizationsPagination.loading || 
+    topStudentsLoading ||
     (user?.role === 'superadmin' && adminsPagination.loading)
 
   // Set initial loading to false once all data has loaded at least once
@@ -205,6 +225,10 @@ export function useAdminData() {
     adminsLoading: adminsPagination.loading,
     adminsError: adminsPagination.error,
     adminsActions,
+    
+    // Top students data
+    topStudents,
+    topStudentsLoading,
     
     // General actions
     refetch,

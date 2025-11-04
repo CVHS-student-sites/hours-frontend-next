@@ -14,6 +14,7 @@ interface OverviewTabProps {
   pendingSupervisors: any[]
   hours: any[]
   organizations: any[]
+  topStudents: any[]
   isProcessing: boolean
   onApproveSupervisor: (id: string) => void
   onRejectSupervisor: (id: string) => void
@@ -29,6 +30,7 @@ export function OverviewTab({
   pendingSupervisors,
   hours,
   organizations,
+  topStudents,
   isProcessing,
   onApproveSupervisor,
   onRejectSupervisor,
@@ -50,7 +52,7 @@ export function OverviewTab({
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentActivityCard hours={hours} />
-        <TopStudentsCard students={students} hours={hours} />
+        <TopStudentsCard topStudents={topStudents} />
       </div>
       <SystemStatusCard overview={overview} hours={hours} students={students} supervisors={supervisors} />
     </div>

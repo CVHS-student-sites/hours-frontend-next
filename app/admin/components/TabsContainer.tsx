@@ -33,6 +33,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           pendingSupervisors={state.pendingSupervisors}
           hours={state.hours}
           organizations={state.organizations}
+          topStudents={state.topStudents}
           isProcessing={state.isProcessing}
           onApproveSupervisor={supervHandlers.handleApproveSupervisor}
           onRejectSupervisor={supervHandlers.handleRejectSupervisor}
