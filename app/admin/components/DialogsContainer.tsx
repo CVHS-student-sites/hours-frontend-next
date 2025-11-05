@@ -10,7 +10,11 @@ import {
   DeleteHourDialog,
   CreateAdminDialog,
   EditAdminDialog,
+  ResetAdminPasswordDialog,
   DeleteGraduatedStudentsDialog,
+  UserHoursDialog,
+  SupervisorActivityDialog,
+  ExportClassSelectionDialog,
 } from './index'
 
 interface DialogsContainerProps {
@@ -19,9 +23,10 @@ interface DialogsContainerProps {
   hoursHandlers: any
   orgHandlers: any
   adminHandlers: any
+  userHoursHandlers?: any
 }
 
-export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandlers, adminHandlers }: DialogsContainerProps) {
+export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandlers, adminHandlers, userHoursHandlers }: DialogsContainerProps) {
   return (
     <>
       <EditUserDialog
@@ -31,6 +36,7 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onUserChange={state.setEditingUser}
         onSave={userHandlers.handleSaveUser}
         onResetPassword={userHandlers.handleResetPassword}
+        onUpdateSupervisorOrganizations={userHandlers.handleUpdateSupervisorOrganizations}
         isProcessing={state.isProcessing}
       />
       <PasswordResetDialog
@@ -73,11 +79,11 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         open={!!state.editingHour}
         onOpenChange={(open) => !open && state.setEditingHour(null)}
         hour={state.editingHour}
-        status={state.editHourStatus}
+        newStatus={state.editHourStatus}
         onStatusChange={state.setEditHourStatus}
         rejectionReason={state.editRejectionReason}
-        onRejectionReasonChange={state.setEditRejectionReason}
-        onSave={hoursHandlers.handleSaveHourEdit}
+        onReasonChange={state.setEditRejectionReason}
+        onSubmit={hoursHandlers.handleSaveHourEdit}
         isProcessing={state.isProcessing}
       />
       <DeleteHourDialog
@@ -109,6 +115,13 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onSave={adminHandlers.handleSaveAdmin}
         isProcessing={state.isProcessing}
       />
+      <ResetAdminPasswordDialog
+        open={state.isResetAdminPasswordDialogOpen}
+        onOpenChange={state.setIsResetAdminPasswordDialogOpen}
+        admin={state.resetPasswordAdmin}
+        onSave={adminHandlers.handleResetAdminPassword}
+        isProcessing={state.isProcessing}
+      />
       <DeleteGraduatedStudentsDialog
         open={state.isDeleteGraduatedDialogOpen}
         onOpenChange={state.setIsDeleteGraduatedDialogOpen}
@@ -116,6 +129,42 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         isLoading={state.isLoadingGraduatedStudents}
         onConfirm={adminHandlers.handleDeleteGraduatedStudents}
         isProcessing={state.isProcessing}
+      />
+      {userHoursHandlers && (
+        <UserHoursDialog
+          open={state.isUserHoursDialogOpen}
+          onOpenChange={userHoursHandlers.handleCloseUserHours}
+          user={state.selectedUser}
+          userStats={userHoursHandlers.userStats}
+          filteredHours={userHoursHandlers.filteredUserHours}
+          searchTerm={state.userHoursSearchTerm}
+          onSearchChange={userHoursHandlers.handleUserHoursSearch}
+          statusFilter={state.userHoursStatusFilter}
+          onStatusChange={userHoursHandlers.handleUserHoursStatusFilter}
+          selectedHours={state.selectedUserHours}
+          onSelectHour={userHoursHandlers.handleSelectUserHour}
+          onSelectAll={(checked) => userHoursHandlers.handleSelectAllUserHours(checked, userHoursHandlers.filteredUserHours)}
+          onApproveSelected={userHoursHandlers.handleApproveUserHours}
+          onRejectSelected={userHoursHandlers.handleRejectUserHours}
+          onEditHour={userHoursHandlers.handleEditUserHour}
+          onDeleteHour={userHoursHandlers.handleDeleteUserHour}
+          isProcessing={state.isProcessing}
+          pagination={state.userHoursPagination}
+          onPageChange={state.setPage}
+          onLimitChange={state.setLimit}
+          loading={state.userHoursLoading}
+        />
+      )}
+      <SupervisorActivityDialog
+        supervisor={state.selectedSupervisorForActivity}
+        isOpen={state.isSupervisorActivityDialogOpen}
+        onClose={() => state.setIsSupervisorActivityDialogOpen(false)}
+      />
+      <ExportClassSelectionDialog
+        isOpen={state.isExportClassDialogOpen}
+        onClose={() => state.setIsExportClassDialogOpen(false)}
+        students={state.students || []}
+        hours={state.hours || []}
       />
     </>
   )

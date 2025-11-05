@@ -5,10 +5,19 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { SearchAndStatusFilter } from './SearchAndStatusFilter'
+import { PaginationControls } from '@/components/ui/pagination-controls'
 import { Building2, Plus, MoreHorizontal, Edit, Trash2 } from 'lucide-react'
 
 interface OrganizationsTabProps {
   organizations: any[]
+  organizationsPagination: any
+  organizationsLoading: boolean
+  organizationsActions: any
+  searchTerm: string
+  onSearchChange: (value: string) => void
+  statusFilter: string
+  onStatusChange: (value: string) => void
   onCreateOrganization: () => void
   onEditOrganization: (org: any) => void
   onDeleteOrganization: (id: string) => void
@@ -17,6 +26,13 @@ interface OrganizationsTabProps {
 
 export function OrganizationsTab({
   organizations,
+  organizationsPagination,
+  organizationsLoading,
+  organizationsActions,
+  searchTerm,
+  onSearchChange,
+  statusFilter,
+  onStatusChange,
   onCreateOrganization,
   onEditOrganization,
   onDeleteOrganization,
@@ -28,7 +44,7 @@ export function OrganizationsTab({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Organizations</CardTitle>
-            <CardDescription>Manage community service organizations ({organizations.length} total)</CardDescription>
+            <CardDescription>Manage community service organizations ({organizationsPagination.total} total)</CardDescription>
           </div>
           <Button onClick={onCreateOrganization} className="bg-[#0084ff] hover:bg-[#0070e6] text-white">
             <Plus className="mr-2 h-4 w-4" />
@@ -37,6 +53,18 @@ export function OrganizationsTab({
         </div>
       </CardHeader>
       <CardContent>
+        <SearchAndStatusFilter
+          searchValue={searchTerm}
+          onSearchChange={onSearchChange}
+          statusValue={statusFilter}
+          onStatusChange={onStatusChange}
+          searchPlaceholder="Search by name, description, or contact email..."
+          statusOptions={[
+            { value: 'all', label: 'All Status' },
+            { value: 'active', label: 'Active' },
+            { value: 'inactive', label: 'Inactive' }
+          ]}
+        />
         <div className="space-y-4">
           {organizations.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
@@ -94,6 +122,12 @@ export function OrganizationsTab({
             ))
           )}
         </div>
+        <PaginationControls
+          pagination={organizationsPagination}
+          onPageChange={organizationsActions.setPage}
+          onLimitChange={organizationsActions.setLimit}
+          loading={organizationsLoading}
+        />
       </CardContent>
     </Card>
   )

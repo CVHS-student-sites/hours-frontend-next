@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { AppShell } from "@/components/layout/app-shell"
 import { PageHeader } from "@/components/layout/page-header"
 import { Button } from "@/components/ui/button"
@@ -27,9 +27,10 @@ export default function SupervisorSettingsPage() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
+  const [selectedOrganizations, setSelectedOrganizations] = useState<Array<{id: string, name: string}>>([])
 
   // Initialize form values when data loads
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       setFirstName(user.firstName || "")
       setLastName(user.lastName || "")
@@ -39,6 +40,22 @@ export default function SupervisorSettingsPage() {
       setFirstName(supervisor.firstName || "")
       setLastName(supervisor.lastName || "")
       setEmail(supervisor.email || "")
+      
+      // Initialize organizations
+      if (supervisor.organizations && Array.isArray(supervisor.organizations)) {
+        const orgs = supervisor.organizations.map((org: any) => ({
+          id: typeof org === 'string' ? org : org._id,
+          name: typeof org === 'string' ? org : org.name
+        }))
+        setSelectedOrganizations(orgs)
+      } else if (supervisor.organizationNames && Array.isArray(supervisor.organizationNames)) {
+        // Fallback: create organization objects from names
+        const orgs = supervisor.organizationNames.map((name: string, index: number) => ({
+          id: `org-${index}`,
+          name: name
+        }))
+        setSelectedOrganizations(orgs)
+      }
     }
   }, [user, supervisor])
 
@@ -57,11 +74,13 @@ export default function SupervisorSettingsPage() {
     setIsSaving(true)
     try {
       // Update supervisor profile
-      const response = await apiClient.put('/supervisor/profile', {
+      const updateData: any = {
         firstName,
         lastName,
-        email,
-      })
+        email
+      }
+      
+      const response = await apiClient.put('/supervisor/profile', updateData)
 
       if (response.success) {
         // Update the user in AuthContext so the changes reflect immediately
@@ -86,6 +105,7 @@ export default function SupervisorSettingsPage() {
       setIsSaving(false)
     }
   }
+  
 
   const handleChangePassword = async () => {
     const email = user?.email || supervisor?.email
@@ -125,10 +145,12 @@ export default function SupervisorSettingsPage() {
   const supervisorData = {
     name: user ? `${user.firstName} ${user.lastName}` : (supervisor ? `${supervisor.firstName} ${supervisor.lastName}` : 'Supervisor'),
     email: email || user?.email || supervisor?.email || 'supervisor@org.com',
-    organizationName: typeof supervisor?.organization === 'string' 
-      ? supervisor?.organization 
-      : (supervisor?.organization as any)?.name || supervisor?.organizationName || 'Organization',
-    isApproved: supervisor?.isApproved || false,
+    organizationNames: selectedOrganizations.length > 0 
+      ? selectedOrganizations.map(org => org.name)
+      : supervisor?.organizationNames && supervisor.organizationNames.length > 0
+      ? supervisor.organizationNames
+      : ['Organization'],
+    isActive: supervisor?.isActive || false,
     joinDate: supervisor?.createdAt || new Date().toISOString(),
   }
 
@@ -156,14 +178,16 @@ export default function SupervisorSettingsPage() {
                   <div>
                     <h3 className="text-lg font-semibold">{supervisorData.name}</h3>
                     <p className="text-muted-foreground">{supervisorData.email}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className="flex items-center gap-1">
-                        <Building2 className="h-3 w-3" />
-                        {supervisorData.organizationName}
-                      </Badge>
-                      {supervisorData.isApproved && (
-                        <Badge variant="default" className="bg-green-600">
-                          Verified
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      {supervisorData.organizationNames.map((orgName, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          <Building2 className="h-3 w-3" />
+                          {orgName}
+                        </Badge>
+                      ))}
+                      {supervisorData.isActive && (
+                        <Badge variant="default" className="bg-blue-600">
+                          Supervisor Active
                         </Badge>
                       )}
                     </div>
@@ -210,22 +234,44 @@ export default function SupervisorSettingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="organization">Organization</Label>
-                  <Input 
-                    id="organization" 
-                    value={supervisorData.organizationName} 
-                    disabled 
-                    className="bg-muted/50" 
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Contact an administrator to change your organization
-                  </p>
+                  <Label htmlFor="organizations">Organization{selectedOrganizations.length > 1 ? 's' : ''}</Label>
+                  
+                  <div className="space-y-1">
+                    {selectedOrganizations.map((org, index) => (
+                      <Input 
+                        key={index}
+                        value={org.name} 
+                        disabled 
+                        className="bg-muted/50" 
+                      />
+                    ))}
+                    <p className="text-xs text-muted-foreground pt-1">
+                      To change your organizations, please contact an administrator.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex justify-end space-x-2">
                   {isEditing ? (
                     <>
-                      <Button variant="outline" onClick={() => setIsEditing(false)} disabled={isSaving}>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          setIsEditing(false)
+                          // Reset to original values
+                          if (user) {
+                            setFirstName(user.firstName || "")
+                            setLastName(user.lastName || "")
+                            setEmail(user.email || "")
+                          }
+                          if (supervisor) {
+                            setFirstName(supervisor.firstName || "")
+                            setLastName(supervisor.lastName || "")
+                            setEmail(supervisor.email || "")
+                          }
+                        }} 
+                        disabled={isSaving}
+                      >
                         Cancel
                       </Button>
                       <Button 
@@ -242,7 +288,9 @@ export default function SupervisorSettingsPage() {
                       </Button>
                     </>
                   ) : (
-                    <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>  
+                    <Button className="bg-[#0084ff] hover:bg-[#0070e6] text-white" onClick={() => setIsEditing(true)}>
+                      Edit Profile
+                    </Button>
                   )}
                 </div>
               </CardContent>
@@ -261,10 +309,16 @@ export default function SupervisorSettingsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <p className="font-medium">{supervisorData.organizationName}</p>
-                  <Badge variant={supervisorData.isApproved ? "default" : "secondary"} className={supervisorData.isApproved ? "bg-green-600" : ""}>
-                    {supervisorData.isApproved ? "Verified Supervisor" : "Pending Approval"}
-                  </Badge>
+                  <div className="space-y-1">
+                    {supervisorData.organizationNames.map((orgName, index) => (
+                      <p key={index} className="font-medium">{orgName}</p>
+                    ))}
+                  </div>
+                  <div className="space-y-1">
+                    <Badge variant={supervisorData.isActive ? "default" : "secondary"} className={supervisorData.isActive ? "bg-blue-600" : ""}>
+                      {supervisorData.isActive ? "Supervisor Active" : "Supervisor Pending"}
+                    </Badge>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -308,7 +362,7 @@ export default function SupervisorSettingsPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Account Status</span>
-                  <span>{supervisorData.isApproved ? "Active" : "Pending"}</span>
+                  <span>{supervisorData.isActive ? "Active" : "Pending"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Role</span>

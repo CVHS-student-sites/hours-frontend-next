@@ -10,9 +10,10 @@ interface TabsContainerProps {
   orgHandlers: any
   supervHandlers: any
   adminHandlers: any
+  userHoursHandlers?: any
 }
 
-export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers, supervHandlers, adminHandlers }: TabsContainerProps) {
+export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers, supervHandlers, adminHandlers, userHoursHandlers }: TabsContainerProps) {
   return (
     <Tabs value={state.activeTab} onValueChange={state.setActiveTab} className="w-full">
       <TabsList className="mb-6">
@@ -32,29 +33,41 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           pendingSupervisors={state.pendingSupervisors}
           hours={state.hours}
           organizations={state.organizations}
+          topStudents={state.topStudents}
           isProcessing={state.isProcessing}
           onApproveSupervisor={supervHandlers.handleApproveSupervisor}
           onRejectSupervisor={supervHandlers.handleRejectSupervisor}
           onOpenDeleteGraduatedDialog={adminHandlers.handleOpenDeleteGraduatedDialog}
+          userRole={state.user?.role}
+          hasGraduatedStudents={state.hasGraduatedStudents}
         />
       </TabsContent>
       <TabsContent value="students">
         <StudentsTab
           students={state.filteredStudents}
+          studentsPagination={state.studentsPagination}
+          studentsLoading={state.studentsLoading}
+          studentsActions={state.studentsActions}
           searchTerm={state.searchTerm}
           onSearchChange={state.setSearchTerm}
           onEditStudent={(student) => userHandlers.handleEditUser(student, 'student')}
+          onViewHours={userHoursHandlers?.handleOpenUserHours ? (student) => userHoursHandlers.handleOpenUserHours(student, 'student') : undefined}
           isProcessing={state.isProcessing}
         />
       </TabsContent>
       <TabsContent value="supervisors">
         <SupervisorsTab
           supervisors={state.filteredSupervisors}
-          searchTerm={state.searchTerm}
-          onSearchChange={state.setSearchTerm}
-          statusFilter={state.statusFilter}
-          onStatusChange={state.setStatusFilter}
+          supervisorsPagination={state.supervisorsPagination}
+          supervisorsLoading={state.supervisorsLoading}
+          supervisorsActions={state.supervisorsActions}
+          searchTerm={state.supervisorSearchTerm}
+          onSearchChange={state.setSupervisorSearchTerm}
+          statusFilter={state.supervisorStatusFilter}
+          onStatusChange={state.setSupervisorStatusFilter}
           onEditSupervisor={(supervisor) => userHandlers.handleEditUser(supervisor, 'supervisor')}
+          onViewHours={userHoursHandlers?.handleOpenUserHours ? (supervisor) => userHoursHandlers.handleOpenUserHours(supervisor, 'supervisor') : undefined}
+          onViewActivity={supervHandlers.handleViewActivity}
           isProcessing={state.isProcessing}
         />
       </TabsContent>
@@ -62,6 +75,9 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
         <HoursTab
           hours={state.filteredHours}
           allHours={state.hours}
+          hoursPagination={state.hoursPagination}
+          hoursLoading={state.hoursLoading}
+          hoursActions={state.hoursActions}
           searchTerm={state.hoursSearchTerm}
           onSearchChange={state.setHoursSearchTerm}
           statusFilter={state.hoursStatusFilter}
@@ -79,7 +95,14 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
       </TabsContent>
       <TabsContent value="organizations">
         <OrganizationsTab
-          organizations={state.organizations}
+          organizations={state.filteredOrganizations}
+          organizationsPagination={state.organizationsPagination}
+          organizationsLoading={state.organizationsLoading}
+          organizationsActions={state.organizationsActions}
+          searchTerm={state.organizationsSearchTerm}
+          onSearchChange={state.setOrganizationsSearchTerm}
+          statusFilter={state.organizationsStatusFilter}
+          onStatusChange={state.setOrganizationsStatusFilter}
           onCreateOrganization={() => state.setIsCreateOrgDialogOpen(true)}
           onEditOrganization={orgHandlers.handleEditOrganization}
           onDeleteOrganization={orgHandlers.handleDeleteOrganization}
@@ -87,14 +110,18 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
         />
       </TabsContent>
       <TabsContent value="statistics">
-        <StatisticsTab students={state.students} supervisors={state.supervisors} hours={state.hours} organizations={state.organizations} />
+        <StatisticsTab overview={state.overview} students={state.students} supervisors={state.supervisors} hours={state.hours} organizations={state.organizations} />
       </TabsContent>
       {state.user?.role === 'superadmin' && (
         <TabsContent value="admins">
           <AdminsTab
             admins={state.admins}
+            adminsPagination={state.adminsPagination}
+            adminsLoading={state.adminsLoading}
+            adminsActions={state.adminsActions}
             onCreateAdmin={() => state.setIsCreateAdminDialogOpen(true)}
             onEditAdmin={adminHandlers.handleEditAdmin}
+            onResetPassword={adminHandlers.handleOpenResetPassword}
             isProcessing={state.isProcessing}
           />
         </TabsContent>

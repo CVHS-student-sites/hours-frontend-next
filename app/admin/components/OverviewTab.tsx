@@ -14,10 +14,13 @@ interface OverviewTabProps {
   pendingSupervisors: any[]
   hours: any[]
   organizations: any[]
+  topStudents: any[]
   isProcessing: boolean
   onApproveSupervisor: (id: string) => void
   onRejectSupervisor: (id: string) => void
   onOpenDeleteGraduatedDialog: () => void
+  userRole?: string
+  hasGraduatedStudents?: boolean
 }
 
 export function OverviewTab({
@@ -27,15 +30,20 @@ export function OverviewTab({
   pendingSupervisors,
   hours,
   organizations,
+  topStudents,
   isProcessing,
   onApproveSupervisor,
   onRejectSupervisor,
   onOpenDeleteGraduatedDialog,
+  userRole,
+  hasGraduatedStudents,
 }: OverviewTabProps) {
   return (
     <div className="space-y-6">
       <AdminStatsCards overview={overview} students={students} supervisors={supervisors} hours={hours} organizations={organizations} />
-      <DeleteGraduatedButton onOpenDialog={onOpenDeleteGraduatedDialog} isLoading={isProcessing} />
+      {userRole === 'superadmin' && hasGraduatedStudents && (
+        <DeleteGraduatedButton onOpenDialog={onOpenDeleteGraduatedDialog} isLoading={isProcessing} />
+      )}
       <PendingSupervisorApprovals
         pendingSupervisors={pendingSupervisors}
         onApprove={onApproveSupervisor}
@@ -44,9 +52,9 @@ export function OverviewTab({
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentActivityCard hours={hours} />
-        <TopStudentsCard students={students} hours={hours} />
+        <TopStudentsCard topStudents={topStudents} />
       </div>
-      <SystemStatusCard hours={hours} students={students} supervisors={supervisors} />
+      <SystemStatusCard overview={overview} hours={hours} students={students} supervisors={supervisors} />
     </div>
   )
 }

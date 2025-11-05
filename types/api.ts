@@ -14,12 +14,12 @@ export interface Student {
   }
   
   export interface Supervisor {
-    _id: string;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
-    organization: string | Organization;
-    organizationName: string;
+    organizations: (string | Organization)[];
+    organizationNames: string[];
     proofOfExistence: string;
     proofType: 'email' | 'website' | 'document' | 'other';
     isActive: boolean;
@@ -105,6 +105,7 @@ export interface Student {
     role: 'student' | 'supervisor' | 'admin' | 'superadmin';
     firstName: string;
     lastName: string;
+    organizationIds?: string[];
   }
   
   export interface AuthResponse {
@@ -172,15 +173,38 @@ export interface Student {
     };
   }
 
-  export interface OrganizationSearchResponse {
-    success: boolean;
-    data: {
-      organizations: OrganizationSearchItem[];
-      total: number;
-      hasMore: boolean;
-      query?: string;
-      offset: number;
-      limit: number;
-    };
-  }
+export interface OrganizationSearchResponse {
+  success: boolean;
+  data: {
+    organizations: OrganizationSearchItem[];
+    total: number;
+    hasMore: boolean;
+    query?: string;
+    offset: number;
+    limit: number;
+  };
+}
+
+// Pagination Types
+export interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface PaginatedResponse<T> {
+  success: boolean;
+  data: T[];
+  pagination: PaginationInfo;
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  filters?: Record<string, any>;
+}
   

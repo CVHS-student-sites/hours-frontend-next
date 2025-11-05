@@ -2,32 +2,17 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { TrendingUp, Users } from 'lucide-react'
-
+import { useEffect } from 'react'
 interface TopStudentsCardProps {
-  students: any[]
-  hours: any[]
+  topStudents: any[]
 }
 
-export function TopStudentsCard({ students, hours }: TopStudentsCardProps) {
-  // Calculate total approved hours for each student from the hours data
-  const studentsWithCalculatedHours = students.map(student => {
-    const studentHours = hours.filter(hour => {
-      const studentId = typeof hour.student === 'string' ? hour.student : hour.student?._id
-      return studentId === student._id && hour.status === 'approved'
-    })
-    
-    const totalApprovedHours = studentHours.reduce((sum, hour) => sum + (hour.hours || 0), 0)
-    
-    return {
-      ...student,
-      calculatedTotalHours: totalApprovedHours
-    }
-  })
+export function TopStudentsCard({ topStudents }: TopStudentsCardProps) {
+ 
+  useEffect(() => {
+    console.log(topStudents)
+  }, [topStudents])
 
-  const topStudents = studentsWithCalculatedHours
-    .filter((s) => s.calculatedTotalHours > 0)
-    .sort((a, b) => b.calculatedTotalHours - a.calculatedTotalHours)
-    .slice(0, 5)
 
   return (
     <Card className="mb-6">
@@ -39,7 +24,7 @@ export function TopStudentsCard({ students, hours }: TopStudentsCardProps) {
         <CardDescription>Students with the most approved community service hours</CardDescription>
       </CardHeader>
       <CardContent>
-        {students.length > 0 ? (
+        {topStudents.length > 0 ? (
           <div className="space-y-3">
             {topStudents.length > 0 ? (
               topStudents.map((student, index) => (
@@ -58,7 +43,7 @@ export function TopStudentsCard({ students, hours }: TopStudentsCardProps) {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg">{student.calculatedTotalHours}h</p>
+                    <p className="font-bold text-lg">{student.totalHours}h</p>
                     <p className="text-xs text-muted-foreground">total hours</p>
                   </div>
                 </div>
