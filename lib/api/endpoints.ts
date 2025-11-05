@@ -110,7 +110,7 @@ export const studentApi = {
 export const supervisorApi = {
   getProfile: () => apiClient.get<Supervisor>('/supervisor/supervisor'),
   getStatistics: () => apiClient.get<SupervisorStatistics>('/supervisor/statistics'),
-  getPendingHours: (params?: PaginationParams) => apiClient.get<PaginatedResponse<Hour>>('/supervisor/hours/pending', params),
+  getPendingHours: (params?: PaginationParams) => apiClient.get<PaginatedResponse<Hour>>('/supervisor/pending-hours', params),
   getHours: (params?: PaginationParams) => apiClient.get<PaginatedResponse<Hour>>('/supervisor/hours', params),
   
   updateHourStatus: (id: string, status: 'approved' | 'rejected', rejectionReason?: string) =>
