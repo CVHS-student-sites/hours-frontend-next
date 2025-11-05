@@ -22,6 +22,8 @@ jobs:
       attestations: write
       id-token: write
       #
+    env:
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
