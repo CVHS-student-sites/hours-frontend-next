@@ -24,7 +24,7 @@ export function TopStudentsCard({ topStudents }: TopStudentsCardProps) {
         <CardDescription>Students with the most approved community service hours</CardDescription>
       </CardHeader>
       <CardContent>
-        {topStudents.length > 0 ? (
+        {topStudents && topStudents.length > 0 ? (
           <div className="space-y-3">
             {topStudents.length > 0 ? (
               topStudents.map((student, index) => (
