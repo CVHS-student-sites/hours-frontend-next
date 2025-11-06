@@ -29,7 +29,7 @@ export default function LoginPage() {
           <AuthFooterLink text="Don't have an account?" linkText="Register here" linkHref="/register" />
         </CardContent>
       </Card>
-      <AuthSecurityBadge text="Secure login powered by CVHS IT" />
+      <AuthSecurityBadge text="Secure login powered by CVHS ❤️" />
     </AuthPageContainer>
   )
 }

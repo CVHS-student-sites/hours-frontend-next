@@ -50,12 +50,6 @@ export default function LandingPage() {
         "Monitor your progress toward graduation requirements with beautiful charts and milestone celebrations.",
       badge: "Visual Progress",
     },
-    {
-      icon: QrCode,
-      title: "QR Code Scanning",
-      description: "Scan QR codes at events for instant hour logging. No more paperwork or manual entry required.",
-      badge: "Instant Scan",
-    },
   ]
 
   return (
@@ -166,7 +160,7 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature, index) => {
                 const Icon = feature.icon
                 return (
@@ -214,12 +208,12 @@ export default function LandingPage() {
                 <span className="text-white font-bold">CV</span>
               </div>
             </div>
-            <p className="text-muted-foreground mb-4">Built with ❤️ for the CVHS community</p>
+            <p className="text-muted-foreground mb-4">Built with ❤️ for the CVHS Community</p>
             <div className="flex justify-center gap-6 text-sm text-muted-foreground">
               <Link href="/help" className="hover:text-[#0084ff] transition-colors">
                 Help & Support
               </Link>
-              <Link href="/contact" className="hover:text-[#0084ff] transition-colors">
+              <Link href="mailto:rgay@gusd.net" className="hover:text-[#0084ff] transition-colors">
                 Contact
               </Link>
             </div>
