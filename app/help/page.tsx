@@ -15,7 +15,7 @@ export default function HelpPage() {
     {
       question: "How long does it take to get hours approved?",
       answer:
-        "Most hours are approved within 2-3 business days. Supervisors receive automatic notifications when new hours are submitted. You'll get an email notification once your hours are approved or if more information is needed.",
+        "Supervisors receive automatic notifications when new hours are submitted. You'll get an email notification once your hours are approved or if more information is needed. After 2-3 days, you can reach out to your supervisor to check for approval.",
     },
     {
       question: "Can I edit hours after submitting them?",
@@ -26,11 +26,6 @@ export default function HelpPage() {
       question: "What if I forgot to log hours from a while ago?",
       answer:
         "You can still log hours from past activities, but make sure to include as much detail as possible and any documentation you have. Supervisors may require additional verification for older entries.",
-    },
-    {
-      question: "How do I use the QR code scanner?",
-      answer:
-        "At participating events, look for QR codes provided by supervisors. Open the app, tap 'Scan', and point your camera at the QR code. Your hours will be automatically logged with event details.",
     },
   ]
 
@@ -67,8 +62,8 @@ export default function HelpPage() {
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-[#0084ff]" />
                   <div>
-                    <p className="font-medium">email placeholder</p>
-                    <p className="text-sm text-muted-foreground">support@cvhs.edu</p>
+                    <p className="font-medium">Roxanne Gay - Librarian Technician</p>
+                    <p className="text-sm text-muted-foreground">rgay@gusd.net</p>
                   </div>
                 </div>
               </CardContent>
