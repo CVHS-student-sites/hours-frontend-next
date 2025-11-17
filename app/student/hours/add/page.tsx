@@ -171,16 +171,15 @@ export default function AddHoursPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="hours">Hours Worked *</Label>
-                  <Input 
-                    id="hours" 
-                    type="number" 
-                    step="0.5" 
-                    min="0.5" 
-                    max="24" 
-                    placeholder="4.0" 
+                  <Input
+                    id="hours"
+                    type="number"
+                    step="0.25"
+                    min="0.25"
+                    placeholder="4.0"
                     value={hours}
                     onChange={(e) => setHours(e.target.value)}
-                    required 
+                    required
                     disabled={isSubmitting}
                   />
                 </div>
