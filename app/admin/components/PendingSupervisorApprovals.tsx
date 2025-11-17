@@ -28,28 +28,63 @@ export function PendingSupervisorApprovals({
       <CardContent>
         <div className="space-y-4">
           {pendingSupervisors.map((supervisor) => (
-            <div key={supervisor._id} className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-              <div>
-                <p className="font-medium">
-                  {supervisor.firstName} {supervisor.lastName}
-                </p>
-                <p className="text-sm text-muted-foreground">{supervisor.email}</p>
-                <p className="text-sm text-muted-foreground">
-                  Organization{supervisor.organizationNames && supervisor.organizationNames.length > 1 ? 's' : ''}: {
-                    supervisor.organizationNames && supervisor.organizationNames.length > 0
-                      ? supervisor.organizationNames.join(', ')
-                      : typeof supervisor.organization === 'string'
-                      ? supervisor.organization
-                      : supervisor.organization?.name || 'Unknown'
-                  }
-                </p>
+            <div key={supervisor._id} className="flex items-start justify-between p-4 rounded-lg bg-muted/30 border border-border/50">
+              <div className="flex-1 space-y-2">
+                <div>
+                  <p className="font-semibold text-lg">
+                    {supervisor.firstName} {supervisor.lastName}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{supervisor.email}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-sm">
+                    <span className="font-medium">Organization{supervisor.organizationNames && supervisor.organizationNames.length > 1 ? 's' : ''}:</span>{' '}
+                    <span className="text-muted-foreground">
+                      {supervisor.organizationNames && supervisor.organizationNames.length > 0
+                        ? supervisor.organizationNames.join(', ')
+                        : typeof supervisor.organization === 'string'
+                        ? supervisor.organization
+                        : supervisor.organization?.name || 'Unknown'}
+                    </span>
+                  </p>
+
+                  {supervisor.proofType && (
+                    <p className="text-sm">
+                      <span className="font-medium">Proof Type:</span>{' '}
+                      <span className="text-muted-foreground capitalize">{supervisor.proofType}</span>
+                    </p>
+                  )}
+
+                  {supervisor.proofOfExistence && (
+                    <div className="mt-2 p-3 bg-background/50 rounded-md border border-border/30">
+                      <p className="text-sm font-medium mb-1">Verification Details:</p>
+                      <p className="text-sm text-muted-foreground italic leading-relaxed">
+                        "{supervisor.proofOfExistence}"
+                      </p>
+                    </div>
+                  )}
+
+                  {supervisor.createdAt && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Applied: {new Date(supervisor.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <Button size="sm" onClick={() => onApprove(supervisor._id)} disabled={isProcessing}>
+
+              <div className="flex flex-col space-y-2 ml-4">
+                <Button size="sm" onClick={() => onApprove(supervisor._id)} disabled={isProcessing} className="whitespace-nowrap">
                   <Check className="mr-2 h-4 w-4" />
                   Approve
                 </Button>
-                <Button size="sm" variant="destructive" onClick={() => onReject(supervisor._id)} disabled={isProcessing}>
+                <Button size="sm" variant="destructive" onClick={() => onReject(supervisor._id)} disabled={isProcessing} className="whitespace-nowrap">
                   <X className="mr-2 h-4 w-4" />
                   Reject
                 </Button>

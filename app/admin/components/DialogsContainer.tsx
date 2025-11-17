@@ -16,6 +16,9 @@ import {
   SupervisorActivityDialog,
   ExportClassSelectionDialog,
 } from './index'
+import { DeleteStudentDialog } from './DeleteStudentDialog'
+import { CreateStudentDialog } from './CreateStudentDialog'
+import { CreateSupervisorDialog } from './CreateSupervisorDialog'
 
 interface DialogsContainerProps {
   state: any
@@ -37,6 +40,8 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onSave={userHandlers.handleSaveUser}
         onResetPassword={userHandlers.handleResetPassword}
         onUpdateSupervisorOrganizations={userHandlers.handleUpdateSupervisorOrganizations}
+        onResendVerification={userHandlers.handleResendVerification}
+        onManualVerify={userHandlers.handleManualVerify}
         isProcessing={state.isProcessing}
       />
       <PasswordResetDialog
@@ -165,6 +170,25 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onClose={() => state.setIsExportClassDialogOpen(false)}
         students={state.students || []}
         hours={state.hours || []}
+      />
+      <DeleteStudentDialog
+        open={state.isDeleteStudentDialogOpen}
+        onOpenChange={state.setIsDeleteStudentDialogOpen}
+        student={state.deletingStudent}
+        onConfirm={userHandlers.handleConfirmDeleteStudent}
+        isProcessing={state.isProcessing}
+      />
+      <CreateStudentDialog
+        open={state.isCreateStudentDialogOpen}
+        onOpenChange={state.setIsCreateStudentDialogOpen}
+        onCreate={userHandlers.handleCreateStudent}
+        isProcessing={state.isProcessing}
+      />
+      <CreateSupervisorDialog
+        open={state.isCreateSupervisorDialogOpen}
+        onOpenChange={state.setIsCreateSupervisorDialogOpen}
+        onCreate={userHandlers.handleCreateSupervisor}
+        isProcessing={state.isProcessing}
       />
     </>
   )

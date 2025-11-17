@@ -92,5 +92,34 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
     }
   }
 
-  return { approveSupervisor, rejectSupervisor, updateSupervisor, deleteSupervisor, resetSupervisorPassword, updateSupervisorOrganizations, getSupervisorActivity }
+  const createSupervisorManually = async (data: {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    organizationIds: string[]
+  }) => {
+    try {
+      const response = await apiClient.createSupervisorManually(data)
+      if (response.success) {
+        await refetch()
+        return true
+      }
+      return false
+    } catch (err: any) {
+      setError(err.message || 'Failed to create supervisor')
+      return false
+    }
+  }
+
+  return {
+    approveSupervisor,
+    rejectSupervisor,
+    updateSupervisor,
+    deleteSupervisor,
+    resetSupervisorPassword,
+    updateSupervisorOrganizations,
+    getSupervisorActivity,
+    createSupervisorManually,
+  }
 }

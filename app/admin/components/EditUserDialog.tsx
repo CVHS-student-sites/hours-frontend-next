@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { OrganizationSelector } from '@/components/ui/organization-selector'
-import { Loader2 } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Loader2, Mail, CheckCircle } from 'lucide-react'
 
 interface EditUserDialogProps {
   open: boolean
@@ -16,14 +17,26 @@ interface EditUserDialogProps {
   onSave: () => void
   onResetPassword?: () => void
   onUpdateSupervisorOrganizations?: (organizations: any[]) => void
+  onResendVerification?: () => void
+  onManualVerify?: () => void
   isProcessing: boolean
 }
 
-export function EditUserDialog({ open, onOpenChange, user, onUserChange, onSave, onUpdateSupervisorOrganizations, isProcessing }: EditUserDialogProps) {
+export function EditUserDialog({
+  open,
+  onOpenChange,
+  user,
+  onUserChange,
+  onSave,
+  onUpdateSupervisorOrganizations,
+  onResendVerification,
+  onManualVerify,
+  isProcessing
+}: EditUserDialogProps) {
   if (!user) return null
 
-  // Determine user type from the user object
-  const userType: 'student' | 'supervisor' = user.studentId ? 'student' : 'supervisor'
+  // Determine user type from the user object - use the type property set when dialog opened
+  const userType: 'student' | 'supervisor' = user.type || (user.studentId ? 'student' : 'supervisor')
 
   // Helper function to update a field
   const onUpdateField = (field: string, value: any) => {
@@ -108,8 +121,52 @@ export function EditUserDialog({ open, onOpenChange, user, onUserChange, onSave,
           {userType === 'student' && (
             <>
               <div className="space-y-2">
+                <Label>Email Verification Status</Label>
+                <div className="flex items-center gap-2">
+                  {user.emailVerified ? (
+                    <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                      <CheckCircle className="mr-1 h-3 w-3" />
+                      Verified
+                    </Badge>
+                  ) : (
+                    <>
+                      <Badge variant="destructive">Not Verified</Badge>
+                      {onResendVerification && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={onResendVerification}
+                          disabled={isProcessing}
+                          className="h-8"
+                        >
+                          <Mail className="mr-1 h-3 w-3" />
+                          Resend Email
+                        </Button>
+                      )}
+                      {onManualVerify && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={onManualVerify}
+                          disabled={isProcessing}
+                          className="h-8"
+                        >
+                          <CheckCircle className="mr-1 h-3 w-3" />
+                          Verify Now
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-studentId">Student ID</Label>
-                <Input id="edit-studentId" value={user.studentId} disabled />
+                <Input
+                  id="edit-studentId"
+                  value={user.studentId}
+                  onChange={(e) => onUpdateField('studentId', e.target.value)}
+                  disabled={isProcessing}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-grade">Grade</Label>

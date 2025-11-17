@@ -38,7 +38,11 @@ export function useAdminDialogState() {
   const [isExportClassDialogOpen, setIsExportClassDialogOpen] = useState(false)
   const [isResetAdminPasswordDialogOpen, setIsResetAdminPasswordDialogOpen] = useState(false)
   const [resetPasswordAdmin, setResetPasswordAdmin] = useState<any>(null)
-  
+  const [deletingStudent, setDeletingStudent] = useState<any>(null)
+  const [isDeleteStudentDialogOpen, setIsDeleteStudentDialogOpen] = useState(false)
+  const [isCreateStudentDialogOpen, setIsCreateStudentDialogOpen] = useState(false)
+  const [isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen] = useState(false)
+
   return {
     editingUser, setEditingUser, isEditDialogOpen, setIsEditDialogOpen,
     isResetPasswordDialogOpen, setIsResetPasswordDialogOpen, newPassword, setNewPassword,
@@ -65,5 +69,9 @@ export function useAdminDialogState() {
     isExportClassDialogOpen, setIsExportClassDialogOpen,
     isResetAdminPasswordDialogOpen, setIsResetAdminPasswordDialogOpen,
     resetPasswordAdmin, setResetPasswordAdmin,
+    deletingStudent, setDeletingStudent,
+    isDeleteStudentDialogOpen, setIsDeleteStudentDialogOpen,
+    isCreateStudentDialogOpen, setIsCreateStudentDialogOpen,
+    isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen,
   }
 }

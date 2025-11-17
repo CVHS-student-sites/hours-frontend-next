@@ -1,8 +1,10 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { SearchAndStatusFilter } from './SearchAndStatusFilter'
 import { SupervisorsTable } from './SupervisorsTable'
+import { UserPlus } from 'lucide-react'
 
 interface SupervisorsTabProps {
   supervisors: any[]
@@ -16,6 +18,7 @@ interface SupervisorsTabProps {
   onEditSupervisor: (supervisor: any) => void
   onViewHours?: (supervisor: any) => void
   onViewActivity?: (supervisor: any) => void
+  onCreateSupervisor?: () => void
   isProcessing: boolean
 }
 
@@ -31,6 +34,7 @@ export function SupervisorsTab({
   onEditSupervisor,
   onViewHours,
   onViewActivity,
+  onCreateSupervisor,
   isProcessing,
 }: SupervisorsTabProps) {
   return (
@@ -43,6 +47,12 @@ export function SupervisorsTab({
               Manage supervisor accounts and organizations ({supervisorsPagination.total} total)
             </CardDescription>
           </div>
+          {onCreateSupervisor && (
+            <Button onClick={onCreateSupervisor} className="bg-[#0084ff] hover:bg-[#0070e6] text-white">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Create Supervisor
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>

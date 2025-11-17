@@ -1,5 +1,5 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://hours-api.cvapps.net';
-//const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+//const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://hours-api.cvapps.net';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -226,6 +226,81 @@ class ApiClient {
       password,
       userType,
     });
+  }
+
+  // ============================================
+  // Admin Student Management Routes
+  // ============================================
+
+  /**
+   * Resend verification email to a student
+   * POST /api/admin/students/:studentId/resend-verification
+   */
+  async resendStudentVerification(studentId: string): Promise<ApiResponse> {
+    return this.post(`/admin/students/${studentId}/resend-verification`);
+  }
+
+  /**
+   * Manually verify a student's email
+   * POST /api/admin/students/:studentId/verify
+   */
+  async verifyStudentEmail(studentId: string): Promise<ApiResponse> {
+    return this.post(`/admin/students/${studentId}/verify`);
+  }
+
+  /**
+   * Change a student's password (admin-initiated)
+   * PUT /api/admin/students/:studentId/password
+   */
+  async changeStudentPassword(studentId: string, newPassword: string): Promise<ApiResponse> {
+    return this.put(`/admin/students/${studentId}/password`, { newPassword });
+  }
+
+  /**
+   * Create a student manually (bypassing registration)
+   * POST /api/admin/students/create
+   */
+  async createStudentManually(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    studentId: string;
+    grade: number;
+    graduatingYear: number;
+    emailVerified?: boolean;
+  }): Promise<ApiResponse> {
+    return this.post('/admin/students/create', data);
+  }
+
+  // ============================================
+  // Admin Supervisor Management Routes
+  // ============================================
+
+  /**
+   * Create a supervisor manually (bypassing registration)
+   * POST /api/admin/supervisors/create
+   */
+  async createSupervisorManually(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    organizationIds: string[];
+  }): Promise<ApiResponse> {
+    return this.post('/admin/supervisors/create', data);
+  }
+
+  // ============================================
+  // Admin Organization Management Routes
+  // ============================================
+
+  /**
+   * Delete an organization permanently (superadmin only)
+   * DELETE /api/admin/organizations/:organizationId
+   */
+  async deleteOrganization(organizationId: string): Promise<ApiResponse> {
+    return this.delete(`/admin/organizations/${organizationId}`);
   }
 }
 

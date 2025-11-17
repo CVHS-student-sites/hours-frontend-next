@@ -18,6 +18,7 @@ export function useAdminUserHandlers(state: any) {
           firstName: state.editingUser.firstName,
           lastName: state.editingUser.lastName,
           email: state.editingUser.email,
+          studentId: state.editingUser.studentId,
           graduatingYear: state.editingUser.graduatingYear,
           grade: state.editingUser.grade,
           isActive: state.editingUser.isActive,
@@ -104,11 +105,121 @@ export function useAdminUserHandlers(state: any) {
     state.setEditingUser({ ...state.editingUser, selectedOrganizations: organizations })
   }
 
+  const handleDeleteStudent = (student: any) => {
+    state.setDeletingStudent(student)
+    state.setIsDeleteStudentDialogOpen(true)
+  }
+
+  const handleConfirmDeleteStudent = async () => {
+    if (!state.deletingStudent) return
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.deleteStudent(state.deletingStudent._id)
+      if (success) {
+        toast.success('Student deleted successfully')
+        state.setIsDeleteStudentDialogOpen(false)
+        state.setDeletingStudent(null)
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to delete student')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
+  const handleResendVerification = async () => {
+    if (!state.editingUser || state.editingUser.type !== 'student') return
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.resendStudentVerification(state.editingUser._id)
+      if (success) {
+        toast.success('Verification email sent successfully')
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to resend verification email')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
+  const handleManualVerify = async () => {
+    if (!state.editingUser || state.editingUser.type !== 'student') return
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.verifyStudentEmail(state.editingUser._id)
+      if (success) {
+        toast.success('Student email verified successfully')
+        // Update the editing user to reflect verification
+        state.setEditingUser({ ...state.editingUser, emailVerified: true })
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to verify student email')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
+  const handleCreateStudent = async (data: {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    studentId: string
+    grade: number
+    graduatingYear: number
+    emailVerified: boolean
+  }) => {
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.createStudentManually(data)
+      if (success) {
+        toast.success('Student created successfully')
+        state.setIsCreateStudentDialogOpen(false)
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to create student')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
+  const handleCreateSupervisor = async (data: {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    organizationIds: string[]
+  }) => {
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.createSupervisorManually(data)
+      if (success) {
+        toast.success('Supervisor created successfully')
+        state.setIsCreateSupervisorDialogOpen(false)
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to create supervisor')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
   return {
     handleEditUser,
     handleSaveUser,
     handleResetPassword,
     handleConfirmPasswordReset,
     handleUpdateSupervisorOrganizations,
+    handleDeleteStudent,
+    handleConfirmDeleteStudent,
+    handleResendVerification,
+    handleManualVerify,
+    handleCreateStudent,
+    handleCreateSupervisor,
   }
 }

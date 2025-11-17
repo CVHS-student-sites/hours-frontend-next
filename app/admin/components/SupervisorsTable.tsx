@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PaginationControls } from '@/components/ui/pagination-controls'
-import { Edit, Eye, Activity } from 'lucide-react'
+import { Activity, Edit } from 'lucide-react'
 import { PaginationInfo } from '@/types/api'
 
 interface SupervisorsTableProps {
@@ -60,7 +60,11 @@ export function SupervisorsTable({
             </TableRow>
           ) : (
             supervisors.map((supervisor) => (
-              <TableRow key={supervisor._id}>
+              <TableRow
+                key={supervisor._id}
+                className="cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => onViewHours && onViewHours(supervisor)}
+              >
                 <TableCell>
                   <div className="flex items-center space-x-3">
                     <Avatar className="h-8 w-8">
@@ -99,21 +103,16 @@ export function SupervisorsTable({
                     {supervisor.isActive ? 'Active' : 'Pending'}
                   </Badge>
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
-                    {onViewHours && (
-                      <Button variant="ghost" size="icon" onClick={() => onViewHours(supervisor)} disabled={isProcessing} title="View hours">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <Button variant="ghost" size="icon" onClick={() => onEditSupervisor(supervisor)} disabled={isProcessing} title="Edit supervisor">
+                      <Edit className="h-4 w-4" />
+                    </Button>
                     {onViewActivity && (
                       <Button variant="ghost" size="icon" onClick={() => onViewActivity(supervisor)} disabled={isProcessing} title="View activity">
                         <Activity className="h-4 w-4" />
                       </Button>
                     )}
-                    <Button variant="ghost" size="icon" onClick={() => onEditSupervisor(supervisor)} disabled={isProcessing} title="Edit supervisor">
-                      <Edit className="h-4 w-4" />
-                    </Button>
                   </div>
                 </TableCell>
               </TableRow>

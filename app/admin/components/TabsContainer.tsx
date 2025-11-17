@@ -51,7 +51,9 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           searchTerm={state.searchTerm}
           onSearchChange={state.setSearchTerm}
           onEditStudent={(student) => userHandlers.handleEditUser(student, 'student')}
+          onDeleteStudent={userHandlers.handleDeleteStudent}
           onViewHours={userHoursHandlers?.handleOpenUserHours ? (student) => userHoursHandlers.handleOpenUserHours(student, 'student') : undefined}
+          onCreateStudent={() => state.setIsCreateStudentDialogOpen(true)}
           isProcessing={state.isProcessing}
         />
       </TabsContent>
@@ -68,6 +70,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           onEditSupervisor={(supervisor) => userHandlers.handleEditUser(supervisor, 'supervisor')}
           onViewHours={userHoursHandlers?.handleOpenUserHours ? (supervisor) => userHoursHandlers.handleOpenUserHours(supervisor, 'supervisor') : undefined}
           onViewActivity={supervHandlers.handleViewActivity}
+          onCreateSupervisor={() => state.setIsCreateSupervisorDialogOpen(true)}
           isProcessing={state.isProcessing}
         />
       </TabsContent>

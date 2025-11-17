@@ -5,13 +5,14 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PaginationControls } from '@/components/ui/pagination-controls'
-import { Edit, Eye } from 'lucide-react'
+import { Trash2, Edit } from 'lucide-react'
 
 import { PaginationInfo } from '@/types/api'
 
 interface StudentsTableProps {
   students: any[]
   onEditStudent: (student: any) => void
+  onDeleteStudent?: (student: any) => void
   onViewHours?: (student: any) => void
   isProcessing: boolean
   pagination?: PaginationInfo
@@ -20,10 +21,11 @@ interface StudentsTableProps {
   loading?: boolean
 }
 
-export function StudentsTable({ 
-  students, 
-  onEditStudent, 
-  onViewHours, 
+export function StudentsTable({
+  students,
+  onEditStudent,
+  onDeleteStudent,
+  onViewHours,
   isProcessing,
   pagination,
   onPageChange,
@@ -60,7 +62,11 @@ export function StudentsTable({
             </TableRow>
           ) : (
             students.map((student) => (
-              <TableRow key={student._id}>
+              <TableRow
+                key={student._id}
+                className="cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => onViewHours && onViewHours(student)}
+              >
                 <TableCell>
                   <div className="flex items-center space-x-3">
                     <Avatar className="h-8 w-8">
@@ -91,16 +97,16 @@ export function StudentsTable({
                 <TableCell>
                   <span className="font-medium">{student.totalHours || 0}h</span>
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
                   <div className="flex gap-1">
-                    {onViewHours && (
-                      <Button variant="ghost" size="icon" onClick={() => onViewHours(student)} disabled={isProcessing} title="View hours">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    )}
                     <Button variant="ghost" size="icon" onClick={() => onEditStudent(student)} disabled={isProcessing} title="Edit student">
                       <Edit className="h-4 w-4" />
                     </Button>
+                    {onDeleteStudent && (
+                      <Button variant="ghost" size="icon" onClick={() => onDeleteStudent(student)} disabled={isProcessing} title="Delete student" className="hover:text-red-600">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
