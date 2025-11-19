@@ -33,28 +33,6 @@ export function useAdminData() {
   // This endpoint requires superadmin role according to backend routes
   const adminsPagination = usePagination<any>(fetchAdmins)
 
-  // Additional methods for graduated students and other non-paginated operations
-  const getGraduatedStudents = useCallback(async () => {
-    try {
-      const response = await apiClient.get<Student[]>('/admin/students/graduated')
-      if (response.success && response.data) return response.data
-      return []
-    } catch (err: any) {
-      setOverviewError(err.message || 'Failed to fetch graduated students')
-      return []
-    }
-  }, [])
-
-  const deleteGraduatedStudents = useCallback(async () => {
-    try {
-      const response = await apiClient.delete('/admin/students/graduated')
-      return response.success
-    } catch (err: any) {
-      setOverviewError(err.message || 'Failed to delete graduated students')
-      return false
-    }
-  }, [])
-
   // Fetch overview data (non-paginated)
   const fetchOverview = async () => {
     setOverviewLoading(true)
@@ -233,12 +211,8 @@ export function useAdminData() {
     // General actions
     refetch,
     setOverviewError,
-    
+
     // Computed loading state for the entire dashboard
     loading: overviewLoading || isAnyDataLoading,
-    
-    // Additional methods
-    getGraduatedStudents,
-    deleteGraduatedStudents
   }
 }

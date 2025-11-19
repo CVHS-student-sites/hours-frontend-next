@@ -16,6 +16,7 @@ interface SupervisorsTabProps {
   statusFilter: string
   onStatusChange: (value: string) => void
   onEditSupervisor: (supervisor: any) => void
+  onDeleteSupervisor?: (supervisor: any) => void
   onViewHours?: (supervisor: any) => void
   onViewActivity?: (supervisor: any) => void
   onCreateSupervisor?: () => void
@@ -32,6 +33,7 @@ export function SupervisorsTab({
   statusFilter,
   onStatusChange,
   onEditSupervisor,
+  onDeleteSupervisor,
   onViewHours,
   onViewActivity,
   onCreateSupervisor,
@@ -63,11 +65,12 @@ export function SupervisorsTab({
           onStatusChange={onStatusChange}
           searchPlaceholder="Search by name or email..."
         />
-        <SupervisorsTable 
-          supervisors={supervisors} 
-          onEditSupervisor={onEditSupervisor} 
-          onViewHours={onViewHours} 
-          onViewActivity={onViewActivity} 
+        <SupervisorsTable
+          supervisors={supervisors}
+          onEditSupervisor={onEditSupervisor}
+          onDeleteSupervisor={onDeleteSupervisor}
+          onViewHours={onViewHours}
+          onViewActivity={onViewActivity}
           isProcessing={isProcessing || supervisorsLoading}
           pagination={supervisorsPagination}
           onPageChange={supervisorsActions.setPage}

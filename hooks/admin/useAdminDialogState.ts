@@ -24,10 +24,6 @@ export function useAdminDialogState() {
   const [newAdminPassword, setNewAdminPassword] = useState('')
   const [newAdminEmail, setNewAdminEmail] = useState('')
   const [newAdminRole, setNewAdminRole] = useState('admin')
-  const [isDeleteGraduatedDialogOpen, setIsDeleteGraduatedDialogOpen] = useState(false)
-  const [graduatedStudents, setGraduatedStudents] = useState<any[]>([])
-  const [isLoadingGraduatedStudents, setIsLoadingGraduatedStudents] = useState(false)
-  const [hasGraduatedStudents, setHasGraduatedStudents] = useState(false)
   const [selectedUser, setSelectedUser] = useState<any>(null)
   const [isUserHoursDialogOpen, setIsUserHoursDialogOpen] = useState(false)
   const [userHoursSearchTerm, setUserHoursSearchTerm] = useState('')
@@ -40,6 +36,8 @@ export function useAdminDialogState() {
   const [resetPasswordAdmin, setResetPasswordAdmin] = useState<any>(null)
   const [deletingStudent, setDeletingStudent] = useState<any>(null)
   const [isDeleteStudentDialogOpen, setIsDeleteStudentDialogOpen] = useState(false)
+  const [deletingSupervisor, setDeletingSupervisor] = useState<any>(null)
+  const [isDeleteSupervisorDialogOpen, setIsDeleteSupervisorDialogOpen] = useState(false)
   const [isCreateStudentDialogOpen, setIsCreateStudentDialogOpen] = useState(false)
   const [isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen] = useState(false)
 
@@ -55,10 +53,6 @@ export function useAdminDialogState() {
     isAdminDialogOpen, setIsAdminDialogOpen, isCreateAdminDialogOpen, setIsCreateAdminDialogOpen,
     newAdminUsername, setNewAdminUsername, newAdminPassword, setNewAdminPassword,
     newAdminEmail, setNewAdminEmail, newAdminRole, setNewAdminRole,
-    isDeleteGraduatedDialogOpen, setIsDeleteGraduatedDialogOpen,
-    graduatedStudents, setGraduatedStudents,
-    isLoadingGraduatedStudents, setIsLoadingGraduatedStudents,
-    hasGraduatedStudents, setHasGraduatedStudents,
     selectedUser, setSelectedUser,
     isUserHoursDialogOpen, setIsUserHoursDialogOpen,
     userHoursSearchTerm, setUserHoursSearchTerm,
@@ -71,6 +65,8 @@ export function useAdminDialogState() {
     resetPasswordAdmin, setResetPasswordAdmin,
     deletingStudent, setDeletingStudent,
     isDeleteStudentDialogOpen, setIsDeleteStudentDialogOpen,
+    deletingSupervisor, setDeletingSupervisor,
+    isDeleteSupervisorDialogOpen, setIsDeleteSupervisorDialogOpen,
     isCreateStudentDialogOpen, setIsCreateStudentDialogOpen,
     isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen,
   }

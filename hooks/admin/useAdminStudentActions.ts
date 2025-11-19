@@ -38,29 +38,6 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     }
   }
-  const getGraduatedStudents = async () => {
-    try {
-      const response = await apiClient.get<Student[]>('/admin/students/graduated')
-      if (response.success && response.data) return response.data
-      return []
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch graduated students')
-      return []
-    }
-  }
-  const deleteGraduatedStudents = async () => {
-    try {
-      const response = await apiClient.delete('/admin/students/graduated')
-      if (response.success) {
-        await refetch()
-        return true
-      }
-      return false
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete graduated students')
-      return false
-    }
-  }
 
   const resendStudentVerification = async (studentId: string) => {
     try {
@@ -104,7 +81,6 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
     email: string
     password: string
     studentId: string
-    grade: number
     graduatingYear: number
     emailVerified?: boolean
   }) => {
@@ -125,8 +101,6 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
     updateStudent,
     deleteStudent,
     resetStudentPassword,
-    getGraduatedStudents,
-    deleteGraduatedStudents,
     resendStudentVerification,
     verifyStudentEmail,
     changeStudentPassword,

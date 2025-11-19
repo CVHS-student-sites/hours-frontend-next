@@ -266,7 +266,6 @@ class ApiClient {
     email: string;
     password: string;
     studentId: string;
-    grade: number;
     graduatingYear: number;
     emailVerified?: boolean;
   }): Promise<ApiResponse> {

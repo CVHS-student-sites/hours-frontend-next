@@ -5,12 +5,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PaginationControls } from '@/components/ui/pagination-controls'
-import { Activity, Edit } from 'lucide-react'
+import { Activity, Edit, Trash2 } from 'lucide-react'
 import { PaginationInfo } from '@/types/api'
 
 interface SupervisorsTableProps {
   supervisors: any[]
   onEditSupervisor: (supervisor: any) => void
+  onDeleteSupervisor?: (supervisor: any) => void
   onViewHours?: (supervisor: any) => void
   onViewActivity?: (supervisor: any) => void
   isProcessing: boolean
@@ -20,11 +21,12 @@ interface SupervisorsTableProps {
   loading?: boolean
 }
 
-export function SupervisorsTable({ 
-  supervisors, 
-  onEditSupervisor, 
-  onViewHours, 
-  onViewActivity, 
+export function SupervisorsTable({
+  supervisors,
+  onEditSupervisor,
+  onDeleteSupervisor,
+  onViewHours,
+  onViewActivity,
   isProcessing,
   pagination,
   onPageChange,
@@ -111,6 +113,11 @@ export function SupervisorsTable({
                     {onViewActivity && (
                       <Button variant="ghost" size="icon" onClick={() => onViewActivity(supervisor)} disabled={isProcessing} title="View activity">
                         <Activity className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {onDeleteSupervisor && (
+                      <Button variant="ghost" size="icon" onClick={() => onDeleteSupervisor(supervisor)} disabled={isProcessing} title="Delete supervisor" className="hover:text-red-600">
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     )}
                   </div>

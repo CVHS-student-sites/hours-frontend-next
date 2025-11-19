@@ -17,7 +17,6 @@ interface CreateStudentDialogProps {
     email: string
     password: string
     studentId: string
-    grade: number
     graduatingYear: number
     emailVerified: boolean
   }) => Promise<void>
@@ -32,7 +31,6 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
     email: '',
     password: '',
     studentId: '',
-    grade: 9,
     graduatingYear: currentYear + 4,
     emailVerified: true,
   })
@@ -46,7 +44,6 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
       email: '',
       password: '',
       studentId: '',
-      grade: 9,
       graduatingYear: currentYear + 4,
       emailVerified: true,
     })
@@ -109,40 +106,33 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="create-studentId">Student ID *</Label>
+            <Label htmlFor="create-studentId">Student ID (max 6 digits) *</Label>
             <Input
               id="create-studentId"
               value={formData.studentId}
-              onChange={(e) => updateField('studentId', e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value
+                // Only allow numbers and limit to 6 digits
+                if (value === '' || (/^\d+$/.test(value) && value.length <= 6)) {
+                  updateField('studentId', value)
+                }
+              }}
               disabled={isProcessing}
-              placeholder="STU12345"
+              placeholder="123456"
+              maxLength={6}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="create-grade">Grade *</Label>
-              <Input
-                id="create-grade"
-                type="number"
-                min="9"
-                max="12"
-                value={formData.grade}
-                onChange={(e) => updateField('grade', parseInt(e.target.value))}
-                disabled={isProcessing}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="create-graduatingYear">Graduating Year *</Label>
-              <Input
-                id="create-graduatingYear"
-                type="number"
-                min={currentYear}
-                max={currentYear + 10}
-                value={formData.graduatingYear}
-                onChange={(e) => updateField('graduatingYear', parseInt(e.target.value))}
-                disabled={isProcessing}
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="create-graduatingYear">Graduating Year *</Label>
+            <Input
+              id="create-graduatingYear"
+              type="number"
+              min={currentYear}
+              max={currentYear + 10}
+              value={formData.graduatingYear}
+              onChange={(e) => updateField('graduatingYear', parseInt(e.target.value))}
+              disabled={isProcessing}
+            />
           </div>
           <div className="flex items-center justify-between">
             <Label htmlFor="create-emailVerified">Mark Email as Verified</Label>

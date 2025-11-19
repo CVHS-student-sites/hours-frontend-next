@@ -35,26 +35,7 @@ export function useAdminState() {
       filterState.setActiveTab('overview')
     }
   }, [filterState.activeTab, user?.role, filterState.setActiveTab])
-  
-  useEffect(() => {
-    const checkGraduatedStudents = async () => {
-      // Only check for graduated students if user is superadmin
-      // This endpoint requires superadmin role according to backend routes
-      if (user?.role === 'superadmin') {
-        try {
-          const students = await adminData.getGraduatedStudents()
-          dialogState.setHasGraduatedStudents(students && students.length > 0)
-        } catch (err) {
-          dialogState.setHasGraduatedStudents(false)
-        }
-      } else {
-        // Regular admins don't have access to graduated students endpoint
-        dialogState.setHasGraduatedStudents(false)
-      }
-    }
-    checkGraduatedStudents()
-  }, [user?.role, dialogState.setHasGraduatedStudents])
-  
+
   return {
     user,
     ...adminData,

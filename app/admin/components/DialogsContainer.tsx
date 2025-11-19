@@ -11,12 +11,12 @@ import {
   CreateAdminDialog,
   EditAdminDialog,
   ResetAdminPasswordDialog,
-  DeleteGraduatedStudentsDialog,
   UserHoursDialog,
   SupervisorActivityDialog,
   ExportClassSelectionDialog,
 } from './index'
 import { DeleteStudentDialog } from './DeleteStudentDialog'
+import { DeleteSupervisorDialog } from './DeleteSupervisorDialog'
 import { CreateStudentDialog } from './CreateStudentDialog'
 import { CreateSupervisorDialog } from './CreateSupervisorDialog'
 
@@ -127,14 +127,6 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onSave={adminHandlers.handleResetAdminPassword}
         isProcessing={state.isProcessing}
       />
-      <DeleteGraduatedStudentsDialog
-        open={state.isDeleteGraduatedDialogOpen}
-        onOpenChange={state.setIsDeleteGraduatedDialogOpen}
-        students={state.graduatedStudents}
-        isLoading={state.isLoadingGraduatedStudents}
-        onConfirm={adminHandlers.handleDeleteGraduatedStudents}
-        isProcessing={state.isProcessing}
-      />
       {userHoursHandlers && (
         <UserHoursDialog
           open={state.isUserHoursDialogOpen}
@@ -176,6 +168,13 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onOpenChange={state.setIsDeleteStudentDialogOpen}
         student={state.deletingStudent}
         onConfirm={userHandlers.handleConfirmDeleteStudent}
+        isProcessing={state.isProcessing}
+      />
+      <DeleteSupervisorDialog
+        open={state.isDeleteSupervisorDialogOpen}
+        onOpenChange={state.setIsDeleteSupervisorDialogOpen}
+        supervisor={state.deletingSupervisor}
+        onConfirm={userHandlers.handleConfirmDeleteSupervisor}
         isProcessing={state.isProcessing}
       />
       <CreateStudentDialog

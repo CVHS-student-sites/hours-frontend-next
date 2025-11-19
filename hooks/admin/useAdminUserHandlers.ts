@@ -168,7 +168,6 @@ export function useAdminUserHandlers(state: any) {
     email: string
     password: string
     studentId: string
-    grade: number
     graduatingYear: number
     emailVerified: boolean
   }) => {
@@ -209,6 +208,29 @@ export function useAdminUserHandlers(state: any) {
     }
   }
 
+  const handleDeleteSupervisor = (supervisor: any) => {
+    state.setDeletingSupervisor(supervisor)
+    state.setIsDeleteSupervisorDialogOpen(true)
+  }
+
+  const handleConfirmDeleteSupervisor = async () => {
+    if (!state.deletingSupervisor) return
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.deleteSupervisor(state.deletingSupervisor._id)
+      if (success) {
+        toast.success('Supervisor deleted successfully')
+        state.setIsDeleteSupervisorDialogOpen(false)
+        state.setDeletingSupervisor(null)
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to delete supervisor')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
   return {
     handleEditUser,
     handleSaveUser,
@@ -217,6 +239,8 @@ export function useAdminUserHandlers(state: any) {
     handleUpdateSupervisorOrganizations,
     handleDeleteStudent,
     handleConfirmDeleteStudent,
+    handleDeleteSupervisor,
+    handleConfirmDeleteSupervisor,
     handleResendVerification,
     handleManualVerify,
     handleCreateStudent,

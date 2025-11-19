@@ -37,9 +37,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           isProcessing={state.isProcessing}
           onApproveSupervisor={supervHandlers.handleApproveSupervisor}
           onRejectSupervisor={supervHandlers.handleRejectSupervisor}
-          onOpenDeleteGraduatedDialog={adminHandlers.handleOpenDeleteGraduatedDialog}
           userRole={state.user?.role}
-          hasGraduatedStudents={state.hasGraduatedStudents}
         />
       </TabsContent>
       <TabsContent value="students">
@@ -68,6 +66,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           statusFilter={state.supervisorStatusFilter}
           onStatusChange={state.setSupervisorStatusFilter}
           onEditSupervisor={(supervisor) => userHandlers.handleEditUser(supervisor, 'supervisor')}
+          onDeleteSupervisor={userHandlers.handleDeleteSupervisor}
           onViewHours={userHoursHandlers?.handleOpenUserHours ? (supervisor) => userHoursHandlers.handleOpenUserHours(supervisor, 'supervisor') : undefined}
           onViewActivity={supervHandlers.handleViewActivity}
           onCreateSupervisor={() => state.setIsCreateSupervisorDialogOpen(true)}
