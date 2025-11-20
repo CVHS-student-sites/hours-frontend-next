@@ -7,7 +7,6 @@ export interface Student {
     grade: number;
     graduatingYear: number;
     totalHours: number;
-    isActive: boolean;
     emailVerified: boolean;
     createdAt: string;
     updatedAt: string;
