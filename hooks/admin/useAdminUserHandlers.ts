@@ -21,7 +21,6 @@ export function useAdminUserHandlers(state: any) {
           studentId: state.editingUser.studentId,
           graduatingYear: state.editingUser.graduatingYear,
           grade: state.editingUser.grade,
-          isActive: state.editingUser.isActive,
         })
         if (success) {
           toast.success('Student updated successfully')

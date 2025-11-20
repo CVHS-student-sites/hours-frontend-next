@@ -33,7 +33,7 @@ export function StatisticsTab({ overview, students, supervisors, hours, organiza
   const avgHoursPerStudent = totalStudents > 0 ? Math.round((approvedHours / totalStudents) * 10) / 10 : 0
   
   // For detailed breakdowns, we still need to use the paginated data since overview doesn't provide these
-  const activeStudents = safeStudents.filter((s) => s.isActive).length
+  const verifiedStudents = safeStudents.filter((s) => s.emailVerified).length
   const activeSupervisors = safeSupervisors.filter((s) => s.isActive).length
   const activeOrganizations = safeOrganizations.filter((o) => o.isActive).length
 

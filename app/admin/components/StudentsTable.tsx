@@ -90,8 +90,8 @@ export function StudentsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={student.isActive ? 'default' : 'secondary'} className="capitalize">
-                    {student.isActive ? 'Active' : 'Inactive'}
+                  <Badge variant={student.emailVerified ? 'default' : 'secondary'} className="capitalize">
+                    {student.emailVerified ? 'Verified' : 'Unverified'}
                   </Badge>
                 </TableCell>
                 <TableCell>

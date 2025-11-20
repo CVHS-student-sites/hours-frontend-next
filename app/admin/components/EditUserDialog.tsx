@@ -227,15 +227,17 @@ export function EditUserDialog({
               </div>
             </div>
           )}
-          <div className="flex items-center justify-between">
-            <Label htmlFor="edit-isActive">{userType === 'supervisor' ? 'Active Status (Pending if inactive)' : 'Active Status'}</Label>
-            <Switch
-              id="edit-isActive"
-              checked={user.isActive}
-              onCheckedChange={(checked) => onUpdateField('isActive', checked)}
-              disabled={isProcessing}
-            />
-          </div>
+          {userType === 'supervisor' && (
+            <div className="flex items-center justify-between">
+              <Label htmlFor="edit-isActive">Active Status (Pending if inactive)</Label>
+              <Switch
+                id="edit-isActive"
+                checked={user.isActive}
+                onCheckedChange={(checked) => onUpdateField('isActive', checked)}
+                disabled={isProcessing}
+              />
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isProcessing}>

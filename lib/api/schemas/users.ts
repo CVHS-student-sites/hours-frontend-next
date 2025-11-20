@@ -7,7 +7,6 @@ export const studentUpdateSchema = z.object({
   studentId: z.string().min(1).optional(),
   graduatingYear: z.number().int().min(2024).max(2030).optional(),
   grade: z.number().int().min(9).max(12).optional(),
-  isActive: z.boolean().optional(),
   verified: z.boolean().optional(),
 })
 
