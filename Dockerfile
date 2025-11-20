@@ -1,6 +1,11 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+ARG NEXT_PUBLIC_API_URL
+
+# Make it an env var inside the build container so Next.js sees it
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 WORKDIR /app
 
 # Copy package files
