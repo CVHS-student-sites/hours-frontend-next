@@ -84,10 +84,7 @@ export function StudentsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div>
-                    <p>Grade {student.grade}</p>
-                    <p className="text-xs text-muted-foreground">Class of {student.graduatingYear}</p>
-                  </div>
+                  <p className="text-sm">Class of {student.graduatingYear}</p>
                 </TableCell>
                 <TableCell>
                   <Badge variant={student.emailVerified ? 'default' : 'secondary'} className="capitalize">

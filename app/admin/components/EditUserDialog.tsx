@@ -184,6 +184,22 @@ export function EditUserDialog({
           )}
           {userType === 'supervisor' && (
             <div className="space-y-2">
+              <Label htmlFor="edit-password">New Password (optional)</Label>
+              <Input
+                id="edit-password"
+                type="password"
+                placeholder="Leave blank to keep current password"
+                value={user.password || ''}
+                onChange={(e) => onUpdateField('password', e.target.value)}
+                disabled={isProcessing}
+              />
+              <p className="text-xs text-muted-foreground">
+                Minimum 6 characters. Leave empty to keep the current password.
+              </p>
+            </div>
+          )}
+          {userType === 'supervisor' && (
+            <div className="space-y-2">
               <Label>Organizations</Label>
               <div className="space-y-2">
                 {getCurrentOrganizations().map((org: any, index: number) => (

@@ -32,7 +32,7 @@ export function ApprovalQueueEntry({
   const student = typeof entry.student === 'string' ? null : entry.student
   const studentName = student ? `${student.firstName} ${student.lastName}` : 'Unknown Student'
   const studentEmail = student?.email || 'N/A'
-  const studentGrade = student?.grade ? `Grade ${student.grade}` : 'N/A'
+  const studentClass = student?.graduatingYear ? `Class of ${student.graduatingYear}` : 'N/A'
 
   const handleReject = () => {
     onReject(rejectionReason)
@@ -52,7 +52,7 @@ export function ApprovalQueueEntry({
           <div className="flex items-center justify-between mb-2">
             <div>
               <h4 className="font-semibold text-balance">{studentName}</h4>
-              <p className="text-sm text-muted-foreground">{studentGrade} • {studentEmail}</p>
+              <p className="text-sm text-muted-foreground">{studentClass} • {studentEmail}</p>
             </div>
             <div className="text-right">
               <div className="text-lg font-bold text-[#0084ff]">{entry.hours}h</div>

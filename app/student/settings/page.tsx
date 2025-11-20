@@ -101,7 +101,7 @@ export default function StudentSettingsPage() {
                     <h3 className="text-lg font-semibold">{studentData.name}</h3>
                     <p className="text-muted-foreground">{studentData.email}</p>
                     <Badge variant="secondary" className="mt-1">
-                      Grade {studentData.grade} • Class of {studentData.graduationYear}
+                      Class of {studentData.graduationYear}
                     </Badge>
                   </div>
                 </div>
@@ -134,8 +134,8 @@ export default function StudentSettingsPage() {
                     <Input id="student-id" value={studentData.studentId} disabled className="bg-muted/50" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="grade">Grade Level</Label>
-                    <Input id="grade" value={`Grade ${studentData.grade}`} disabled className="bg-muted/50" />
+                    <Label htmlFor="graduation">Graduation Year</Label>
+                    <Input id="graduation" value={`Class of ${studentData.graduationYear}`} disabled className="bg-muted/50" />
                   </div>
                 </div>
 

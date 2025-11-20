@@ -137,7 +137,7 @@ export default function VerifyEmailPage() {
                       Welcome, {studentInfo.firstName} {studentInfo.lastName}!
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Grade: {studentInfo.grade} | Class of {studentInfo.graduatingYear}
+                      Class of {studentInfo.graduatingYear}
                     </p>
                   </div>
                 )}

@@ -16,6 +16,7 @@ export const supervisorUpdateSchema = z.object({
   email: z.string().email().optional(),
   organizationId: z.string().optional(),
   isActive: z.boolean().optional(),
+  password: z.string().min(6).optional(),
 })
 
 export const adminCreateSchema = z.object({

@@ -38,7 +38,7 @@ export function TopStudentsCard({ topStudents }: TopStudentsCardProps) {
                         {student.firstName} {student.lastName}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Grade {student.grade} • Class of {student.graduatingYear}
+                        Class of {student.graduatingYear}
                       </p>
                     </div>
                   </div>

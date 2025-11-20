@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { LoadingSpinner, ErrorState } from '@/components/feedback'
 import { apiClient } from '@/lib/api-client'
-import { formatDistanceToNow } from 'date-fns'
 
 interface SupervisorActivityDialogProps {
   supervisor: any | null
@@ -173,7 +172,6 @@ export function SupervisorActivityDialog({ supervisor, isOpen, onClose }: Superv
                   <TableRow>
                     <TableHead>Description</TableHead>
                     <TableHead className="w-[140px]">Type</TableHead>
-                    <TableHead className="w-[140px]">Time</TableHead>
                     <TableHead className="w-[100px]">Details</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -193,17 +191,12 @@ export function SupervisorActivityDialog({ supervisor, isOpen, onClose }: Superv
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge 
-                          variant={getActivityBadgeVariant(activity.activityType)} 
+                        <Badge
+                          variant={getActivityBadgeVariant(activity.activityType)}
                           className={`text-xs ${getActivityBadgeStyle(activity.activityType)}`}
                         >
                           {getActivityTypeLabel(activity.activityType)}
                         </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
-                        </span>
                       </TableCell>
                       <TableCell>
                         <div className="text-xs text-muted-foreground">

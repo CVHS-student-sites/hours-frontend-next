@@ -29,20 +29,27 @@ export function useAdminUserHandlers(state: any) {
         }
       } else {
         // Update supervisor basic info
-        const success = await state.updateSupervisor(state.editingUser._id, {
+        const updateData: any = {
           firstName: state.editingUser.firstName,
           lastName: state.editingUser.lastName,
           email: state.editingUser.email,
           isActive: state.editingUser.isActive,
-        })
-        
+        }
+
+        // Only include password if it's provided
+        if (state.editingUser.password && state.editingUser.password.trim().length > 0) {
+          updateData.password = state.editingUser.password
+        }
+
+        const success = await state.updateSupervisor(state.editingUser._id, updateData)
+
         if (success) {
           // Update supervisor organizations if they have changed
           if (state.editingUser.selectedOrganizations) {
             const organizationIds = state.editingUser.selectedOrganizations.map((org: any) => org.id)
             await state.updateSupervisorOrganizations(state.editingUser._id, organizationIds)
           }
-          
+
           toast.success('Supervisor updated successfully')
           state.setIsEditDialogOpen(false)
           state.setEditingUser(null)

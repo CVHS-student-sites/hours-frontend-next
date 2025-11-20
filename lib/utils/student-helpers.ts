@@ -21,5 +21,5 @@ export function getStudentName(user: User | null, student: any): string {
 }
 
 export function getStudentGrade(student: any): string {
-  return student ? `Grade ${student.grade}` : ''
+  return student ? `Class of ${student.graduatingYear}` : ''
 }

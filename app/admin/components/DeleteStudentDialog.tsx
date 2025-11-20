@@ -35,7 +35,7 @@ export function DeleteStudentDialog({ open, onOpenChange, student, onConfirm, is
                 </p>
                 <p className="text-sm text-muted-foreground">{student.email}</p>
                 <p className="text-sm text-muted-foreground">Student ID: {student.studentId}</p>
-                <p className="text-sm text-muted-foreground">Grade {student.grade}, Class of {student.graduatingYear}</p>
+                <p className="text-sm text-muted-foreground">Class of {student.graduatingYear}</p>
                 <p className="text-sm font-medium mt-2 text-foreground">Total Hours: {student.totalHours || 0}h</p>
               </div>
             )}
