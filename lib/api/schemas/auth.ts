@@ -13,7 +13,7 @@ export const studentRegistrationSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   studentId: z.string().min(1, 'Student ID is required'),
-  graduatingYear: z.number().int().min(2024).max(2030),
+  graduatingYear: z.number().int().min(2024),
   email: z.string().email('Must be a valid email').endsWith('@stu.gusd.net', 'Must use school email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })

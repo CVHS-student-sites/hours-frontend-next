@@ -127,8 +127,7 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
             <Input
               id="create-graduatingYear"
               type="number"
-              min={currentYear}
-              max={currentYear + 10}
+              min={2024}
               value={formData.graduatingYear}
               onChange={(e) => updateField('graduatingYear', parseInt(e.target.value))}
               disabled={isProcessing}

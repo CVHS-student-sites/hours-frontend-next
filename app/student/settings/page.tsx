@@ -70,7 +70,6 @@ export default function StudentSettingsPage() {
     name: user ? `${user.firstName} ${user.lastName}` : (student ? `${student.firstName} ${student.lastName}` : 'Student'),
     email: user?.email || student?.email || 'student@cvhs.edu',
     studentId: student?.studentId || user?.id || 'N/A',
-    grade: student?.grade || 'N/A',
     graduationYear: student?.graduatingYear || new Date().getFullYear() + 1,
     totalHours: statistics?.approvedHours || 0,
     joinDate: student?.createdAt || new Date().toISOString(),

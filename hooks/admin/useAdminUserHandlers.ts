@@ -20,7 +20,6 @@ export function useAdminUserHandlers(state: any) {
           email: state.editingUser.email,
           studentId: state.editingUser.studentId,
           graduatingYear: state.editingUser.graduatingYear,
-          grade: state.editingUser.grade,
         })
         if (success) {
           toast.success('Student updated successfully')
@@ -168,6 +167,24 @@ export function useAdminUserHandlers(state: any) {
     }
   }
 
+  const handleManualUnverify = async () => {
+    if (!state.editingUser || state.editingUser.type !== 'student') return
+    state.setIsProcessing(true)
+
+    try {
+      const success = await state.unverifyStudentEmail(state.editingUser._id)
+      if (success) {
+        toast.success('Student email unverified successfully')
+        // Update the editing user to reflect unverification
+        state.setEditingUser({ ...state.editingUser, emailVerified: false })
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to unverify student email')
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
   const handleCreateStudent = async (data: {
     firstName: string
     lastName: string
@@ -249,6 +266,7 @@ export function useAdminUserHandlers(state: any) {
     handleConfirmDeleteSupervisor,
     handleResendVerification,
     handleManualVerify,
+    handleManualUnverify,
     handleCreateStudent,
     handleCreateSupervisor,
   }

@@ -5,8 +5,7 @@ export const studentUpdateSchema = z.object({
   lastName: z.string().min(1).optional(),
   email: z.string().email().optional(),
   studentId: z.string().min(1).optional(),
-  graduatingYear: z.number().int().min(2024).max(2030).optional(),
-  grade: z.number().int().min(9).max(12).optional(),
+  graduatingYear: z.number().int().min(2024).optional(),
   verified: z.boolean().optional(),
 })
 

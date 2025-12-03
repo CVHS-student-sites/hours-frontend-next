@@ -10,22 +10,22 @@ export function useAdminState() {
   const adminData = useAdminDashboard()
   const filterState = useAdminFilterState()
   const dialogState = useAdminDialogState()
-  
-  // Connect search terms to pagination actions
+
+  // Connect search terms to pagination actions (debouncing now happens in the component)
   useEffect(() => {
     adminData.studentsActions.setSearch(filterState.searchTerm)
   }, [filterState.searchTerm, adminData.studentsActions.setSearch])
-  
+
   useEffect(() => {
     adminData.supervisorsActions.setFilters({ status: filterState.supervisorStatusFilter })
     adminData.supervisorsActions.setSearch(filterState.supervisorSearchTerm)
   }, [filterState.supervisorSearchTerm, filterState.supervisorStatusFilter, adminData.supervisorsActions.setFilters, adminData.supervisorsActions.setSearch])
-  
+
   useEffect(() => {
     adminData.hoursActions.setFilters({ status: filterState.hoursStatusFilter })
     adminData.hoursActions.setSearch(filterState.hoursSearchTerm)
   }, [filterState.hoursSearchTerm, filterState.hoursStatusFilter, adminData.hoursActions.setFilters, adminData.hoursActions.setSearch])
-  
+
   useEffect(() => {
     adminData.organizationsActions.setSearch(filterState.organizationsSearchTerm)
   }, [filterState.organizationsSearchTerm, adminData.organizationsActions.setSearch])

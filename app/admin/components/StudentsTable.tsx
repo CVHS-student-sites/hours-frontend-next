@@ -38,7 +38,7 @@ export function StudentsTable({
         <TableHeader>
           <TableRow>
             <TableHead>Student</TableHead>
-            <TableHead>Grade</TableHead>
+            <TableHead>Graduating Year</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Total Hours</TableHead>
             <TableHead className="w-[100px]"></TableHead>

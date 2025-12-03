@@ -42,6 +42,7 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onUpdateSupervisorOrganizations={userHandlers.handleUpdateSupervisorOrganizations}
         onResendVerification={userHandlers.handleResendVerification}
         onManualVerify={userHandlers.handleManualVerify}
+        onManualUnverify={userHandlers.handleManualUnverify}
         isProcessing={state.isProcessing}
       />
       <PasswordResetDialog

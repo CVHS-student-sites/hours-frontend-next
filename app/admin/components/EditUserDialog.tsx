@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { OrganizationSelector } from '@/components/ui/organization-selector'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Mail, CheckCircle } from 'lucide-react'
+import { Loader2, Mail, CheckCircle, XCircle } from 'lucide-react'
 
 interface EditUserDialogProps {
   open: boolean
@@ -19,6 +19,7 @@ interface EditUserDialogProps {
   onUpdateSupervisorOrganizations?: (organizations: any[]) => void
   onResendVerification?: () => void
   onManualVerify?: () => void
+  onManualUnverify?: () => void
   isProcessing: boolean
 }
 
@@ -31,6 +32,7 @@ export function EditUserDialog({
   onUpdateSupervisorOrganizations,
   onResendVerification,
   onManualVerify,
+  onManualUnverify,
   isProcessing
 }: EditUserDialogProps) {
   if (!user) return null
@@ -124,10 +126,24 @@ export function EditUserDialog({
                 <Label>Email Verification Status</Label>
                 <div className="flex items-center gap-2">
                   {user.emailVerified ? (
-                    <Badge variant="default" className="bg-green-600 hover:bg-green-700">
-                      <CheckCircle className="mr-1 h-3 w-3" />
-                      Verified
-                    </Badge>
+                    <>
+                      <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                        <CheckCircle className="mr-1 h-3 w-3" />
+                        Verified
+                      </Badge>
+                      {onManualUnverify && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={onManualUnverify}
+                          disabled={isProcessing}
+                          className="h-8"
+                        >
+                          <XCircle className="mr-1 h-3 w-3" />
+                          Unverify
+                        </Button>
+                      )}
+                    </>
                   ) : (
                     <>
                       <Badge variant="destructive">Not Verified</Badge>
@@ -169,14 +185,13 @@ export function EditUserDialog({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-grade">Grade</Label>
+                <Label htmlFor="edit-graduatingYear">Graduating Year</Label>
                 <Input
-                  id="edit-grade"
+                  id="edit-graduatingYear"
                   type="number"
-                  min="9"
-                  max="12"
-                  value={user.grade}
-                  onChange={(e) => onUpdateField('grade', parseInt(e.target.value))}
+                  min="2024"
+                  value={user.graduatingYear}
+                  onChange={(e) => onUpdateField('graduatingYear', parseInt(e.target.value))}
                   disabled={isProcessing}
                 />
               </div>

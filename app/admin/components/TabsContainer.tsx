@@ -55,7 +55,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           isProcessing={state.isProcessing}
         />
       </TabsContent>
-      <TabsContent value="supervisors">
+      <TabsContent value="supervisors" forceMount className="data-[state=inactive]:hidden">
         <SupervisorsTab
           supervisors={state.filteredSupervisors}
           supervisorsPagination={state.supervisorsPagination}

@@ -4,7 +4,6 @@ export interface Student {
     lastName: string;
     email: string;
     studentId: string;
-    grade: number;
     graduatingYear: number;
     totalHours: number;
     emailVerified: boolean;

@@ -13,7 +13,6 @@ import toast from "react-hot-toast"
 interface StudentInfo {
   firstName: string;
   lastName: string;
-  grade: number;
   graduatingYear: number;
 }
 

@@ -249,6 +249,14 @@ class ApiClient {
   }
 
   /**
+   * Manually unverify a student's email
+   * POST /api/admin/students/:studentId/unverify
+   */
+  async unverifyStudentEmail(studentId: string): Promise<ApiResponse> {
+    return this.post(`/admin/students/${studentId}/unverify`);
+  }
+
+  /**
    * Change a student's password (admin-initiated)
    * PUT /api/admin/students/:studentId/password
    */

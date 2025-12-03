@@ -64,6 +64,20 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
     }
   }
 
+  const unverifyStudentEmail = async (studentId: string) => {
+    try {
+      const response = await apiClient.unverifyStudentEmail(studentId)
+      if (response.success) {
+        await refetch()
+        return true
+      }
+      return false
+    } catch (err: any) {
+      setError(err.message || 'Failed to unverify student email')
+      return false
+    }
+  }
+
   const changeStudentPassword = async (studentId: string, newPassword: string) => {
     try {
       const response = await apiClient.changeStudentPassword(studentId, newPassword)
@@ -103,6 +117,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
     resetStudentPassword,
     resendStudentVerification,
     verifyStudentEmail,
+    unverifyStudentEmail,
     changeStudentPassword,
     createStudentManually,
   }

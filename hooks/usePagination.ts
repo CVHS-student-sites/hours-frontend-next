@@ -116,7 +116,7 @@ export function usePagination<T>(
   }, [])
 
   const setSearch = useCallback((search: string) => {
-    setState(prev => ({ ...prev, search }))
+    setState(prev => ({ ...prev, search, page: 1 })) // Reset to first page when changing search
   }, [])
 
   const setFilters = useCallback((filters: Record<string, any>) => {
