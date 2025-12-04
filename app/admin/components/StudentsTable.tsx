@@ -38,6 +38,7 @@ export function StudentsTable({
         <TableHeader>
           <TableRow>
             <TableHead>Student</TableHead>
+            <TableHead>Student ID</TableHead>
             <TableHead>Graduating Year</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Total Hours</TableHead>
@@ -47,7 +48,7 @@ export function StudentsTable({
         <TableBody>
           {loading && students.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} className="text-center py-8">
+              <TableCell colSpan={6} className="text-center py-8">
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
                   <span className="ml-2 text-muted-foreground">Loading...</span>
@@ -56,7 +57,7 @@ export function StudentsTable({
             </TableRow>
           ) : students.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} className="text-center text-muted-foreground">
+              <TableCell colSpan={6} className="text-center text-muted-foreground">
                 No students found
               </TableCell>
             </TableRow>
@@ -82,6 +83,9 @@ export function StudentsTable({
                       <p className="text-sm text-muted-foreground">{student.email}</p>
                     </div>
                   </div>
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm font-mono">{student.studentId || 'N/A'}</p>
                 </TableCell>
                 <TableCell>
                   <p className="text-sm">Class of {student.graduatingYear}</p>

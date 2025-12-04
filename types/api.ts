@@ -92,6 +92,7 @@ export interface Student {
     totalSupervisors: number;
     totalOrganizations: number;
     totalHours: number;
+    approvedHours: number;
     pendingHours: number;
     pendingSupervisors: number;
     recentActivity: any[];

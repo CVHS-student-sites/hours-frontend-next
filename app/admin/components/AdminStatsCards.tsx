@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { GradientCard } from '@/components/ui/gradient-card'
-import { Users, Clock, AlertTriangle, Building2 } from 'lucide-react'
+import { Users, CheckCircle, AlertTriangle, Building2 } from 'lucide-react'
 
 interface AdminStatsCardsProps {
   overview: any
@@ -15,7 +15,7 @@ interface AdminStatsCardsProps {
 export function AdminStatsCards({ overview, students, supervisors, hours, organizations }: AdminStatsCardsProps) {
   // Use overview data for accurate totals
   const totalStudents = overview?.totalStudents ?? 0
-  const totalHours = overview?.totalHours ?? 0
+  const approvedHours = overview?.approvedHours ?? 0
   const pendingHours = overview?.pendingHours ?? 0
   const totalSupervisors = overview?.totalSupervisors ?? 0
 
@@ -38,15 +38,15 @@ export function AdminStatsCards({ overview, students, supervisors, hours, organi
 
       <Card className="p-6">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Total Hours</CardTitle>
+          <CardTitle className="text-sm font-medium text-muted-foreground">Approved Hours</CardTitle>
         </CardHeader>
         <CardContent className="pb-2">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-3xl font-bold">{totalHours}</div>
+              <div className="text-3xl font-bold text-green-600">{approvedHours}</div>
               <p className="text-xs text-muted-foreground">community service</p>
             </div>
-            <Clock className="h-8 w-8 text-green-500/60" />
+            <CheckCircle className="h-8 w-8 text-green-500/60" />
           </div>
         </CardContent>
       </Card>
