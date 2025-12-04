@@ -67,7 +67,7 @@ export function TopNav({ userRole }: TopNavProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
+      <div className="flex h-16 items-center justify-between w-full px-4 md:px-2">
         {/* Brand */}
         <div className="flex items-center space-x-4">
           <div 
@@ -85,7 +85,7 @@ export function TopNav({ userRole }: TopNavProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 lg:space-x-0">
           <Button variant="ghost" size="icon" className="md:hidden">
             <Search className="h-4 w-4" />
           </Button>
@@ -115,11 +115,11 @@ export function TopNav({ userRole }: TopNavProps) {
 
           {/* Show logout button for admins and superadmins */}
           {(actualRole === 'admin' || actualRole === 'superadmin') && (
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleLogout}
-              className="h-8 w-8"
+              className="h-8 w-8 lg:mr-0"
               title="Log out"
             >
               <LogOut className="h-4 w-4" />
