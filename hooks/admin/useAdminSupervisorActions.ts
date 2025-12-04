@@ -12,7 +12,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to approve supervisor')
-      return false
+      throw err
     }
   }
   const rejectSupervisor = async (supervisorId: string, reason: string) => {
@@ -25,7 +25,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to reject supervisor')
-      return false
+      throw err
     }
   }
   const updateSupervisor = async (supervisorId: string, updates: Partial<Supervisor>) => {
@@ -38,7 +38,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to update supervisor')
-      return false
+      throw err
     }
   }
   const deleteSupervisor = async (supervisorId: string) => {
@@ -51,7 +51,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to delete supervisor')
-      return false
+      throw err
     }
   }
   const resetSupervisorPassword = async (email: string, newPassword: string) => {
@@ -61,7 +61,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to reset supervisor password')
-      return false
+      throw err
     }
   }
 
@@ -75,7 +75,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to update supervisor organizations')
-      return false
+      throw err
     }
   }
 
@@ -88,7 +88,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return null
     } catch (err: any) {
       setError(err.message || 'Failed to fetch supervisor activity')
-      return null
+      throw err
     }
   }
 
@@ -108,7 +108,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to create supervisor')
-      return false
+      throw err
     }
   }
 

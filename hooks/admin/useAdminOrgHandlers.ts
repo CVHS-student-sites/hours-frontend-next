@@ -65,9 +65,10 @@ export function useAdminOrgHandlers(state: any) {
 
     state.setIsProcessing(true)
     try {
-      await state.deleteOrganization(id)
-      toast.success('Organization deleted successfully')
-      await state.refetch()
+      const success = await state.deleteOrganization(id)
+      if (success) {
+        toast.success('Organization deleted successfully')
+      }
     } catch (err: any) {
       toast.error(err.message)
     } finally {

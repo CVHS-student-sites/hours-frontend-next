@@ -90,6 +90,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           onApproveSelected={hoursHandlers.handleApproveHours}
           onRejectSelected={() => state.setBulkRejectDialogOpen(true)}
           onEditHour={hoursHandlers.handleEditHour}
+          onEditHourDetails={hoursHandlers.handleOpenEditHourDialog}
           onDeleteHour={(hour) => state.setDeleteConfirmHour(hour)}
           onExportCSV={hoursHandlers.exportHoursToCSV}
           isProcessing={state.isProcessing}

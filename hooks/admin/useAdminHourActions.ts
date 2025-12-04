@@ -11,7 +11,7 @@ export function useAdminHourActions(refetch: () => Promise<void>, setError: (err
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to create hour')
-      return false
+      throw err
     }
   }
   const approveHour = async (hourId: string) => {
@@ -24,7 +24,7 @@ export function useAdminHourActions(refetch: () => Promise<void>, setError: (err
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to approve hour')
-      return false
+      throw err
     }
   }
   const rejectHour = async (hourId: string, reason: string) => {
@@ -37,7 +37,7 @@ export function useAdminHourActions(refetch: () => Promise<void>, setError: (err
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to reject hour')
-      return false
+      throw err
     }
   }
   const deleteHour = async (hourId: string) => {
@@ -50,8 +50,21 @@ export function useAdminHourActions(refetch: () => Promise<void>, setError: (err
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to delete hour')
-      return false
+      throw err
     }
   }
-  return { createHourForStudent, approveHour, rejectHour, deleteHour }
+  const updateHour = async (hourId: string, updates: { date?: string; hours?: number; description?: string }) => {
+    try {
+      const response = await apiClient.put(`/admin/hours/${hourId}`, updates)
+      if (response.success) {
+        await refetch()
+        return true
+      }
+      return false
+    } catch (err: any) {
+      setError(err.message || 'Failed to update hour')
+      throw err
+    }
+  }
+  return { createHourForStudent, approveHour, rejectHour, deleteHour, updateHour }
 }

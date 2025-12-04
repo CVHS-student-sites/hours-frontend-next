@@ -19,6 +19,7 @@ import { DeleteStudentDialog } from './DeleteStudentDialog'
 import { DeleteSupervisorDialog } from './DeleteSupervisorDialog'
 import { CreateStudentDialog } from './CreateStudentDialog'
 import { CreateSupervisorDialog } from './CreateSupervisorDialog'
+import { EditHourDialog } from './EditHourDialog'
 
 interface DialogsContainerProps {
   state: any
@@ -76,7 +77,7 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         open={state.bulkRejectDialogOpen}
         onOpenChange={state.setBulkRejectDialogOpen}
         selectedCount={state.selectedHours.length}
-        reason={state.bulkRejectionReason}
+        rejectionReason={state.bulkRejectionReason}
         onReasonChange={state.setBulkRejectionReason}
         onConfirm={hoursHandlers.handleBulkReject}
         isProcessing={state.isProcessing}
@@ -188,6 +189,13 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         open={state.isCreateSupervisorDialogOpen}
         onOpenChange={state.setIsCreateSupervisorDialogOpen}
         onCreate={userHandlers.handleCreateSupervisor}
+        isProcessing={state.isProcessing}
+      />
+      <EditHourDialog
+        open={state.isEditHourDialogOpen}
+        onOpenChange={state.setIsEditHourDialogOpen}
+        hour={state.editingHourForEdit}
+        onSubmit={hoursHandlers.handleSubmitEditHour}
         isProcessing={state.isProcessing}
       />
     </>

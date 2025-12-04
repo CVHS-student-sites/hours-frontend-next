@@ -11,18 +11,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { Edit, MoreVertical, Trash2, FileEdit } from 'lucide-react'
 
 interface HoursTableRowProps {
   entry: any
   isSelected: boolean
   onSelect: (checked: boolean) => void
   onEdit: () => void
+  onEditDetails: () => void
   onDelete: () => void
   isProcessing: boolean
 }
 
-export function HoursTableRow({ entry, isSelected, onSelect, onEdit, onDelete, isProcessing }: HoursTableRowProps) {
+export function HoursTableRow({ entry, isSelected, onSelect, onEdit, onEditDetails, onDelete, isProcessing }: HoursTableRowProps) {
   const student = typeof entry.student === 'string' ? null : entry.student
   const studentName = student ? `${student.firstName} ${student.lastName}` : 'Unknown Student'
   const studentEmail = student?.email || 'N/A'
@@ -69,6 +70,10 @@ export function HoursTableRow({ entry, isSelected, onSelect, onEdit, onDelete, i
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onEditDetails}>
+              <FileEdit className="mr-2 h-4 w-4" />
+              Edit Hour
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={onEdit}>
               <Edit className="mr-2 h-4 w-4" />
               Change Status

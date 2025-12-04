@@ -12,7 +12,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to update student')
-      return false
+      throw err
     }
   }
   const deleteStudent = async (studentId: string) => {
@@ -25,7 +25,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to delete student')
-      return false
+      throw err
     }
   }
   const resetStudentPassword = async (studentId: string, newPassword: string) => {
@@ -35,7 +35,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to reset password')
-      return false
+      throw err
     }
   }
 
@@ -46,7 +46,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to resend verification email')
-      return false
+      throw err
     }
   }
 
@@ -60,7 +60,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to verify student email')
-      return false
+      throw err
     }
   }
 
@@ -74,7 +74,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to unverify student email')
-      return false
+      throw err
     }
   }
 
@@ -85,7 +85,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to change student password')
-      return false
+      throw err
     }
   }
 
@@ -107,7 +107,7 @@ export function useAdminStudentActions(refetch: () => Promise<void>, setError: (
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to create student')
-      return false
+      throw err
     }
   }
 

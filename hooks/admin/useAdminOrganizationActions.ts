@@ -12,7 +12,7 @@ export function useAdminOrganizationActions(refetch: () => Promise<void>, setErr
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to create organization')
-      return false
+      throw err
     }
   }
   const updateOrganization = async (organizationId: string, updates: Partial<Organization>) => {
@@ -25,7 +25,7 @@ export function useAdminOrganizationActions(refetch: () => Promise<void>, setErr
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to update organization')
-      return false
+      throw err
     }
   }
   const deleteOrganization = async (organizationId: string) => {
@@ -38,7 +38,7 @@ export function useAdminOrganizationActions(refetch: () => Promise<void>, setErr
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to delete organization')
-      return false
+      throw err
     }
   }
   return { createOrganization, updateOrganization, deleteOrganization }

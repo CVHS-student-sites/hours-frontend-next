@@ -6,9 +6,10 @@ export function useAdminSupervHandlers(state: any) {
   const handleApproveSupervisor = async (id: string) => {
     state.setIsProcessing(true)
     try {
-      await state.approveSupervisor(id)
-      toast.success('Supervisor approved successfully')
-      await state.refetch()
+      const success = await state.approveSupervisor(id)
+      if (success) {
+        toast.success('Supervisor approved successfully')
+      }
     } catch (err: any) {
       toast.error(err.message)
     } finally {
@@ -22,9 +23,10 @@ export function useAdminSupervHandlers(state: any) {
 
     state.setIsProcessing(true)
     try {
-      await state.rejectSupervisor(id, reason)
-      toast.success('Supervisor rejected successfully')
-      await state.refetch()
+      const success = await state.rejectSupervisor(id, reason)
+      if (success) {
+        toast.success('Supervisor rejected successfully')
+      }
     } catch (err: any) {
       toast.error(err.message)
     } finally {

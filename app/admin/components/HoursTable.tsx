@@ -11,6 +11,7 @@ interface HoursTableProps {
   onSelectHour: (id: string, checked: boolean) => void
   onSelectAll: (checked: boolean) => void
   onEditHour: (hour: any) => void
+  onEditHourDetails: (hour: any) => void
   onDeleteHour: (hour: any) => void
   isProcessing: boolean
 }
@@ -21,6 +22,7 @@ export function HoursTable({
   onSelectHour,
   onSelectAll,
   onEditHour,
+  onEditHourDetails,
   onDeleteHour,
   isProcessing,
 }: HoursTableProps) {
@@ -64,6 +66,7 @@ export function HoursTable({
               isSelected={selectedHours.includes(entry._id)}
               onSelect={(checked) => onSelectHour(entry._id, checked)}
               onEdit={() => onEditHour(entry)}
+              onEditDetails={() => onEditHourDetails(entry)}
               onDelete={() => onDeleteHour(entry)}
               isProcessing={isProcessing}
             />

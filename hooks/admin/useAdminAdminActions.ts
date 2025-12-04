@@ -11,7 +11,7 @@ export function useAdminAdminActions(refetch: () => Promise<void>, setError: (er
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to create admin')
-      return false
+      throw err
     }
   }
   const updateAdmin = async (adminId: string, updates: any) => {
@@ -24,7 +24,7 @@ export function useAdminAdminActions(refetch: () => Promise<void>, setError: (er
       return false
     } catch (err: any) {
       setError(err.message || 'Failed to update admin')
-      return false
+      throw err
     }
   }
   return { createAdmin, updateAdmin }

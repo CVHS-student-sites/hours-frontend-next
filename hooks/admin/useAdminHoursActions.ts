@@ -5,10 +5,14 @@ export function useAdminHoursActions(state: any) {
   const handleApproveHours = async () => {
     state.setIsProcessing(true)
     try {
+      let successCount = 0
       for (const hourId of state.selectedHours) {
-        await state.approveHour(hourId)
+        const success = await state.approveHour(hourId)
+        if (success) successCount++
       }
-      toast.success(`${state.selectedHours.length} hour entries have been approved.`)
+      if (successCount > 0) {
+        toast.success(`${successCount} hour entries have been approved.`)
+      }
       state.setSelectedHours([])
       await state.refetch()
     } catch (err: any) {
@@ -24,10 +28,14 @@ export function useAdminHoursActions(state: any) {
     }
     state.setIsProcessing(true)
     try {
+      let successCount = 0
       for (const hourId of state.selectedHours) {
-        await state.rejectHour(hourId, state.bulkRejectionReason)
+        const success = await state.rejectHour(hourId, state.bulkRejectionReason)
+        if (success) successCount++
       }
-      toast.success(`${state.selectedHours.length} hour entries have been rejected.`)
+      if (successCount > 0) {
+        toast.success(`${successCount} hour entries have been rejected.`)
+      }
       state.setSelectedHours([])
       state.setBulkRejectionReason('')
       state.setBulkRejectDialogOpen(false)
@@ -51,15 +59,17 @@ export function useAdminHoursActions(state: any) {
     }
     state.setIsProcessing(true)
     try {
+      let success = false
       if (state.editHourStatus === 'approved') {
-        await state.approveHour(state.editingHour._id)
+        success = await state.approveHour(state.editingHour._id)
       } else if (state.editHourStatus === 'rejected') {
-        await state.rejectHour(state.editingHour._id, state.editRejectionReason)
+        success = await state.rejectHour(state.editingHour._id, state.editRejectionReason)
       }
-      toast.success('Hour entry updated successfully')
-      state.setEditingHour(null)
-      state.setEditRejectionReason('')
-      await state.refetch()
+      if (success) {
+        toast.success('Hour entry updated successfully')
+        state.setEditingHour(null)
+        state.setEditRejectionReason('')
+      }
     } catch (err: any) {
       toast.error(err.message)
     } finally {
@@ -70,15 +80,39 @@ export function useAdminHoursActions(state: any) {
     if (!state.deleteConfirmHour) return
     state.setIsProcessing(true)
     try {
-      await state.deleteHour(state.deleteConfirmHour._id)
-      toast.success('Hour entry deleted successfully')
-      state.setDeleteConfirmHour(null)
-      await state.refetch()
+      const success = await state.deleteHour(state.deleteConfirmHour._id)
+      if (success) {
+        toast.success('Hour entry deleted successfully')
+        state.setDeleteConfirmHour(null)
+      }
     } catch (err: any) {
       toast.error(err.message)
     } finally {
       state.setIsProcessing(false)
     }
   }
-  return { handleApproveHours, handleBulkReject, handleEditHour, handleSaveHourEdit, handleDeleteHour }
+  const handleOpenEditHourDialog = (hour: any) => {
+    state.setEditingHourForEdit(hour)
+    state.setIsEditHourDialogOpen(true)
+  }
+  const handleSubmitEditHour = async (updatedHour: any) => {
+    state.setIsProcessing(true)
+    try {
+      const success = await state.updateHour(updatedHour._id, {
+        date: updatedHour.date,
+        hours: updatedHour.hours,
+        description: updatedHour.description,
+      })
+      if (success) {
+        toast.success('Hour entry updated successfully')
+        state.setIsEditHourDialogOpen(false)
+        state.setEditingHourForEdit(null)
+      }
+    } catch (err: any) {
+      toast.error(err.message)
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+  return { handleApproveHours, handleBulkReject, handleEditHour, handleSaveHourEdit, handleDeleteHour, handleOpenEditHourDialog, handleSubmitEditHour }
 }

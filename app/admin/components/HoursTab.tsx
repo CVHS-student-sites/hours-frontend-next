@@ -23,6 +23,7 @@ interface HoursTabProps {
   onApproveSelected: () => void
   onRejectSelected: () => void
   onEditHour: (hour: any) => void
+  onEditHourDetails: (hour: any) => void
   onDeleteHour: (hour: any) => void
   onExportCSV: () => void
   isProcessing: boolean
@@ -44,6 +45,7 @@ export function HoursTab({
   onApproveSelected,
   onRejectSelected,
   onEditHour,
+  onEditHourDetails,
   onDeleteHour,
   onExportCSV,
   isProcessing,
@@ -88,6 +90,7 @@ export function HoursTab({
             onSelectHour={onSelectHour}
             onSelectAll={(checked) => onSelectAll(checked)}
             onEditHour={onEditHour}
+            onEditHourDetails={onEditHourDetails}
             onDeleteHour={onDeleteHour}
             isProcessing={isProcessing}
           />

@@ -211,6 +211,7 @@ export function useAdminData() {
     // General actions
     refetch,
     setOverviewError,
+    setError: setOverviewError, // Alias for use by action hooks
 
     // Computed loading state for the entire dashboard
     loading: overviewLoading || isAnyDataLoading,
