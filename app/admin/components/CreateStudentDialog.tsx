@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 interface CreateStudentDialogProps {
   open: boolean
@@ -35,18 +36,67 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
     emailVerified: true,
   })
 
+  // Reset form when dialog opens
+  useEffect(() => {
+    if (open) {
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        studentId: '',
+        graduatingYear: currentYear + 4,
+        emailVerified: true,
+      })
+    }
+  }, [open, currentYear])
+
   const handleSubmit = async () => {
+    // Client-side validation
+    if (!formData.firstName.trim()) {
+      toast.error('First name is required')
+      return
+    }
+    if (!formData.lastName.trim()) {
+      toast.error('Last name is required')
+      return
+    }
+    if (!formData.email.trim()) {
+      toast.error('Email is required')
+      return
+    }
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+    if (!formData.password) {
+      toast.error('Password is required')
+      return
+    }
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters long')
+      return
+    }
+    if (!formData.studentId) {
+      toast.error('Student ID is required')
+      return
+    }
+    if (!/^\d+$/.test(formData.studentId) || formData.studentId.length > 6) {
+      toast.error('Student ID must be a number with maximum 6 digits')
+      return
+    }
+    if (!formData.graduatingYear) {
+      toast.error('Graduating year is required')
+      return
+    }
+    if (formData.graduatingYear < currentYear || formData.graduatingYear > currentYear + 5) {
+      toast.error(`Graduating year must be between ${currentYear} and ${currentYear + 5}`)
+      return
+    }
+
     await onCreate(formData)
-    // Reset form
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      studentId: '',
-      graduatingYear: currentYear + 4,
-      emailVerified: true,
-    })
   }
 
   const updateField = (field: string, value: any) => {
@@ -127,7 +177,8 @@ export function CreateStudentDialog({ open, onOpenChange, onCreate, isProcessing
             <Input
               id="create-graduatingYear"
               type="number"
-              min={2024}
+              min={currentYear}
+              max={currentYear + 5}
               value={formData.graduatingYear}
               onChange={(e) => updateField('graduatingYear', parseInt(e.target.value))}
               disabled={isProcessing}

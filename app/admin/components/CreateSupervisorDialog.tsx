@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { OrganizationSelector } from '@/components/ui/organization-selector'
 import { Loader2, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
+import toast from 'react-hot-toast'
 
 interface CreateSupervisorDialogProps {
   open: boolean
@@ -31,21 +32,58 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
     selectedOrganizations: [] as Array<{ id: string; name: string; verified: boolean }>,
   })
 
+  // Reset form when dialog opens
+  useEffect(() => {
+    if (open) {
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        selectedOrganizations: [],
+      })
+    }
+  }, [open])
+
   const handleSubmit = async () => {
+    // Client-side validation
+    if (!formData.firstName.trim()) {
+      toast.error('First name is required')
+      return
+    }
+    if (!formData.lastName.trim()) {
+      toast.error('Last name is required')
+      return
+    }
+    if (!formData.email.trim()) {
+      toast.error('Email is required')
+      return
+    }
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+    if (!formData.password) {
+      toast.error('Password is required')
+      return
+    }
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters long')
+      return
+    }
+    if (formData.selectedOrganizations.length === 0) {
+      toast.error('Please select at least one organization')
+      return
+    }
+
     await onCreate({
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       password: formData.password,
       organizationIds: formData.selectedOrganizations.map((org) => org.id),
-    })
-    // Reset form
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      selectedOrganizations: [],
     })
   }
 
@@ -151,7 +189,7 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
                 }}
                 placeholder="Add organization..."
                 disabled={isProcessing}
-                allowAddNew={false}
+                allowAddNew={true}
               />
             </div>
           </div>

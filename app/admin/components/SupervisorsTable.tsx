@@ -101,8 +101,17 @@ export function SupervisorsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={supervisor.isActive ? 'default' : 'secondary'} className="capitalize">
-                    {supervisor.isActive ? 'Active' : 'Pending'}
+                  <Badge
+                    variant={
+                      supervisor.isRejected
+                        ? 'destructive'
+                        : supervisor.isActive
+                          ? 'default'
+                          : 'secondary'
+                    }
+                    className="capitalize"
+                  >
+                    {supervisor.isRejected ? 'Rejected' : supervisor.isActive ? 'Active' : 'Pending'}
                   </Badge>
                 </TableCell>
                 <TableCell onClick={(e) => e.stopPropagation()}>
