@@ -20,6 +20,7 @@ import { DeleteSupervisorDialog } from './DeleteSupervisorDialog'
 import { CreateStudentDialog } from './CreateStudentDialog'
 import { CreateSupervisorDialog } from './CreateSupervisorDialog'
 import { EditHourDialog } from './EditHourDialog'
+import { CreateManualHourDialog } from './CreateManualHourDialog'
 
 interface DialogsContainerProps {
   state: any
@@ -196,6 +197,12 @@ export function DialogsContainer({ state, userHandlers, hoursHandlers, orgHandle
         onOpenChange={state.setIsEditHourDialogOpen}
         hour={state.editingHourForEdit}
         onSubmit={hoursHandlers.handleSubmitEditHour}
+        isProcessing={state.isProcessing}
+      />
+      <CreateManualHourDialog
+        open={state.isCreateManualHourDialogOpen}
+        onOpenChange={state.setIsCreateManualHourDialogOpen}
+        onCreate={hoursHandlers.handleCreateManualHour}
         isProcessing={state.isProcessing}
       />
     </>

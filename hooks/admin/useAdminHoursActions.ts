@@ -114,5 +114,23 @@ export function useAdminHoursActions(state: any) {
       state.setIsProcessing(false)
     }
   }
-  return { handleApproveHours, handleBulkReject, handleEditHour, handleSaveHourEdit, handleDeleteHour, handleOpenEditHourDialog, handleSubmitEditHour }
+
+  const handleCreateManualHour = async (data: any) => {
+    state.setIsProcessing(true)
+    try {
+      const success = await state.createManualHour(data)
+      if (success) {
+        toast.success('Manual hour entry created successfully')
+        state.setIsCreateManualHourDialogOpen(false)
+        await state.refetch()
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to create manual hour entry')
+      throw err
+    } finally {
+      state.setIsProcessing(false)
+    }
+  }
+
+  return { handleApproveHours, handleBulkReject, handleEditHour, handleSaveHourEdit, handleDeleteHour, handleOpenEditHourDialog, handleSubmitEditHour, handleCreateManualHour }
 }

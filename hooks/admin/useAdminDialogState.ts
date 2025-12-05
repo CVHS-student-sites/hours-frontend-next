@@ -42,6 +42,7 @@ export function useAdminDialogState() {
   const [isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen] = useState(false)
   const [editingHourForEdit, setEditingHourForEdit] = useState<any>(null)
   const [isEditHourDialogOpen, setIsEditHourDialogOpen] = useState(false)
+  const [isCreateManualHourDialogOpen, setIsCreateManualHourDialogOpen] = useState(false)
 
   return {
     editingUser, setEditingUser, isEditDialogOpen, setIsEditDialogOpen,
@@ -73,5 +74,6 @@ export function useAdminDialogState() {
     isCreateSupervisorDialogOpen, setIsCreateSupervisorDialogOpen,
     editingHourForEdit, setEditingHourForEdit,
     isEditHourDialogOpen, setIsEditHourDialogOpen,
+    isCreateManualHourDialogOpen, setIsCreateManualHourDialogOpen,
   }
 }

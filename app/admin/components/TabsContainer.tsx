@@ -93,6 +93,7 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           onEditHourDetails={hoursHandlers.handleOpenEditHourDialog}
           onDeleteHour={(hour) => state.setDeleteConfirmHour(hour)}
           onExportCSV={hoursHandlers.exportHoursToCSV}
+          onCreateManualHour={() => state.setIsCreateManualHourDialogOpen(true)}
           isProcessing={state.isProcessing}
         />
       </TabsContent>

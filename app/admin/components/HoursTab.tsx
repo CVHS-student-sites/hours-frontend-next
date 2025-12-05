@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, XCircle } from 'lucide-react'
+import { CheckCircle, XCircle, Plus } from 'lucide-react'
 import { HoursFiltersBar } from './HoursFiltersBar'
 import { HoursTable } from './HoursTable'
 import { PaginationControls } from '@/components/ui/pagination-controls'
@@ -26,6 +26,7 @@ interface HoursTabProps {
   onEditHourDetails: (hour: any) => void
   onDeleteHour: (hour: any) => void
   onExportCSV: () => void
+  onCreateManualHour: () => void
   isProcessing: boolean
 }
 
@@ -48,6 +49,7 @@ export function HoursTab({
   onEditHourDetails,
   onDeleteHour,
   onExportCSV,
+  onCreateManualHour,
   isProcessing,
 }: HoursTabProps) {
   return (
@@ -69,18 +71,25 @@ export function HoursTab({
                 Review, approve, and manage all service hour entries ({hours.length} of {allHours.length} total)
               </CardDescription>
             </div>
-            {selectedHours.length > 0 && (
-              <div className="flex items-center space-x-2">
-                <Button onClick={onApproveSelected} className="bg-green-600 hover:bg-green-700 text-white" disabled={isProcessing}>
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Approve ({selectedHours.length})
+            <div className="flex items-center space-x-2">
+              {selectedHours.length > 0 ? (
+                <>
+                  <Button onClick={onApproveSelected} className="bg-green-600 hover:bg-green-700 text-white" disabled={isProcessing}>
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Approve ({selectedHours.length})
+                  </Button>
+                  <Button onClick={onRejectSelected} variant="destructive" disabled={isProcessing}>
+                    <XCircle className="mr-2 h-4 w-4" />
+                    Reject ({selectedHours.length})
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={onCreateManualHour} className="bg-[#0084ff] hover:bg-[#0070e6] text-white" disabled={isProcessing}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Manual Entry
                 </Button>
-                <Button onClick={onRejectSelected} variant="destructive" disabled={isProcessing}>
-                  <XCircle className="mr-2 h-4 w-4" />
-                  Reject ({selectedHours.length})
-                </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardContent>
