@@ -66,5 +66,25 @@ export function useAdminHourActions(refetch: () => Promise<void>, setError: (err
       throw err
     }
   }
-  return { createHourForStudent, approveHour, rejectHour, deleteHour, updateHour }
+  const createManualHour = async (data: {
+    studentId: string
+    date: string
+    hours: number
+    organizationName: string
+    supervisorEmail: string
+    description: string
+  }) => {
+    try {
+      const response = await apiClient.post('/admin/hours/manual', data)
+      if (response.success) {
+        await refetch()
+        return true
+      }
+      return false
+    } catch (err: any) {
+      setError(err.message || 'Failed to create manual hour')
+      throw err
+    }
+  }
+  return { createHourForStudent, approveHour, rejectHour, deleteHour, updateHour, createManualHour }
 }

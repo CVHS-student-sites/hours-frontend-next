@@ -44,8 +44,18 @@ export function StudentSelector({
     const loadStudents = async () => {
       try {
         setIsLoading(true)
-        const searchParam = studentSearch.trim() ? `?search=${encodeURIComponent(studentSearch.trim())}` : ''
-        const response = await apiClient.get(`/admin/students${searchParam}`)
+        const params = new URLSearchParams()
+
+        // Add search parameter if exists
+        if (studentSearch.trim()) {
+          params.append('search', studentSearch.trim())
+        }
+
+        // Add limit to prevent loading too many students at once
+        params.append('limit', '50')
+
+        const queryString = params.toString()
+        const response = await apiClient.get(`/admin/students${queryString ? `?${queryString}` : ''}`)
 
         if (response.success && response.data) {
           const students = Array.isArray(response.data) ? response.data : response.data.students || []
@@ -127,38 +137,44 @@ export function StudentSelector({
                   </div>
                 ) : (
                   <div className="p-1">
-                    {filteredStudents.map((student) => (
-                      <button
-                        key={student._id || student.id}
-                        onClick={() => {
-                          onChange(student)
-                          setIsOpen(false)
-                          setStudentSearch("")
-                        }}
-                        className={cn(
-                          "w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-left",
-                          (value?._id === student._id || value?.id === student.id) && "bg-muted"
-                        )}
-                      >
-                        <Check
+                    {filteredStudents.map((student) => {
+                      // Get student ID (prefer _id over id)
+                      const studentId = student._id || student.id
+                      const valueId = value?._id || value?.id
+                      // Only show as selected if both IDs exist and match
+                      const isSelected = !!(valueId && studentId && valueId === studentId)
+
+                      return (
+                        <button
+                          key={studentId}
+                          onClick={() => {
+                            onChange(student)
+                            setIsOpen(false)
+                            setStudentSearch("")
+                          }}
                           className={cn(
-                            "h-4 w-4 shrink-0",
-                            (value?._id === student._id || value?.id === student.id)
-                              ? "opacity-100"
-                              : "opacity-0"
+                            "w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-left",
+                            isSelected && "bg-muted"
                           )}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div className="truncate font-medium">
-                            {student.firstName} {student.lastName}
-                            {student.grade && <span className="text-muted-foreground ml-2">Grade {student.grade}</span>}
+                        >
+                          <Check
+                            className={cn(
+                              "h-4 w-4 shrink-0",
+                              isSelected ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="truncate font-medium">
+                              {student.firstName} {student.lastName}
+                              {student.grade && <span className="text-muted-foreground ml-2">Grade {student.grade}</span>}
+                            </div>
+                            <div className="truncate text-xs text-muted-foreground">
+                              {student.email}
+                            </div>
                           </div>
-                          <div className="truncate text-xs text-muted-foreground">
-                            {student.email}
-                          </div>
-                        </div>
-                      </button>
-                    ))}
+                        </button>
+                      )
+                    })}
                   </div>
                 )}
               </>
