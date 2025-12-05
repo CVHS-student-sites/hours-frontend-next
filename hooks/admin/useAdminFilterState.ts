@@ -4,7 +4,7 @@ import { useState } from 'react'
 export function useAdminFilterState() {
   const [activeTab, setActiveTab] = useState('overview')
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
+  const [studentsStatusFilter, setStudentsStatusFilter] = useState('all')
   const [supervisorSearchTerm, setSupervisorSearchTerm] = useState('')
   const [supervisorStatusFilter, setSupervisorStatusFilter] = useState('all')
   const [hoursSearchTerm, setHoursSearchTerm] = useState('')
@@ -15,7 +15,7 @@ export function useAdminFilterState() {
   const [isProcessing, setIsProcessing] = useState(false)
   return {
     activeTab, setActiveTab, searchTerm, setSearchTerm,
-    statusFilter, setStatusFilter, 
+    studentsStatusFilter, setStudentsStatusFilter,
     supervisorSearchTerm, setSupervisorSearchTerm,
     supervisorStatusFilter, setSupervisorStatusFilter,
     hoursSearchTerm, setHoursSearchTerm,

@@ -13,8 +13,9 @@ export function useAdminState() {
 
   // Connect search terms to pagination actions (debouncing now happens in the component)
   useEffect(() => {
+    adminData.studentsActions.setFilters({ status: filterState.studentsStatusFilter })
     adminData.studentsActions.setSearch(filterState.searchTerm)
-  }, [filterState.searchTerm, adminData.studentsActions.setSearch])
+  }, [filterState.searchTerm, filterState.studentsStatusFilter, adminData.studentsActions.setFilters, adminData.studentsActions.setSearch])
 
   useEffect(() => {
     adminData.supervisorsActions.setFilters({ status: filterState.supervisorStatusFilter })
@@ -27,8 +28,9 @@ export function useAdminState() {
   }, [filterState.hoursSearchTerm, filterState.hoursStatusFilter, adminData.hoursActions.setFilters, adminData.hoursActions.setSearch])
 
   useEffect(() => {
+    adminData.organizationsActions.setFilters({ status: filterState.organizationsStatusFilter })
     adminData.organizationsActions.setSearch(filterState.organizationsSearchTerm)
-  }, [filterState.organizationsSearchTerm, adminData.organizationsActions.setSearch])
+  }, [filterState.organizationsSearchTerm, filterState.organizationsStatusFilter, adminData.organizationsActions.setFilters, adminData.organizationsActions.setSearch])
   
   useEffect(() => {
     if (filterState.activeTab === 'admins' && user?.role !== 'superadmin') {

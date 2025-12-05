@@ -13,6 +13,8 @@ interface StudentsTabProps {
   studentsActions: any
   searchTerm: string
   onSearchChange: (value: string) => void
+  statusFilter: string
+  onStatusChange: (value: string) => void
   onEditStudent: (student: any) => void
   onDeleteStudent?: (student: any) => void
   onViewHours?: (student: any) => void
@@ -27,6 +29,8 @@ export function StudentsTab({
   studentsActions,
   searchTerm,
   onSearchChange,
+  statusFilter,
+  onStatusChange,
   onEditStudent,
   onDeleteStudent,
   onViewHours,
@@ -55,10 +59,15 @@ export function StudentsTab({
         <SearchAndStatusFilter
           searchValue={searchTerm}
           onSearchChange={onSearchChange}
-          statusValue="all"
-          onStatusChange={() => {}}
+          statusValue={statusFilter}
+          onStatusChange={onStatusChange}
           searchPlaceholder="Search by name, email, or student ID..."
-          showStatusFilter={false}
+          showStatusFilter={true}
+          statusOptions={[
+            { value: 'all', label: 'All Status' },
+            { value: 'verified', label: 'Verified' },
+            { value: 'unverified', label: 'Unverified' }
+          ]}
         />
         <StudentsTable
           students={students}

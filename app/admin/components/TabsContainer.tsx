@@ -48,6 +48,8 @@ export function TabsContainer({ state, userHandlers, hoursHandlers, orgHandlers,
           studentsActions={state.studentsActions}
           searchTerm={state.searchTerm}
           onSearchChange={state.setSearchTerm}
+          statusFilter={state.studentsStatusFilter}
+          onStatusChange={state.setStudentsStatusFilter}
           onEditStudent={(student) => userHandlers.handleEditUser(student, 'student')}
           onDeleteStudent={userHandlers.handleDeleteStudent}
           onViewHours={userHoursHandlers?.handleOpenUserHours ? (student) => userHoursHandlers.handleOpenUserHours(student, 'student') : undefined}

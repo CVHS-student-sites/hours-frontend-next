@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Search, Bell, Settings, LogOut } from "lucide-react"
+import { Settings, LogOut } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
 
@@ -86,10 +86,6 @@ export function TopNav({ userRole }: TopNavProps) {
 
         {/* Actions */}
         <div className="flex items-center space-x-2 lg:space-x-0">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Search className="h-4 w-4" />
-          </Button>
-
           {/* Show profile dropdown for students and supervisors */}
           {(actualRole === 'student' || actualRole === 'supervisor') && (
             <DropdownMenu>
