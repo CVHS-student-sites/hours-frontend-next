@@ -21,6 +21,12 @@ export function useAdminUserHandlers(state: any) {
           studentId: state.editingUser.studentId,
           graduatingYear: state.editingUser.graduatingYear,
         })
+
+        // Update password separately if provided
+        if (success && state.editingUser.password && state.editingUser.password.trim().length > 0) {
+          await state.changeStudentPassword(state.editingUser._id, state.editingUser.password)
+        }
+
         if (success) {
           toast.success('Student updated successfully')
           state.setIsEditDialogOpen(false)

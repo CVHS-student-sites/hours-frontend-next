@@ -195,6 +195,20 @@ export function EditUserDialog({
                   disabled={isProcessing}
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-student-password">New Password (optional)</Label>
+                <Input
+                  id="edit-student-password"
+                  type="password"
+                  placeholder="Leave blank to keep current password"
+                  value={user.password || ''}
+                  onChange={(e) => onUpdateField('password', e.target.value)}
+                  disabled={isProcessing}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Minimum 8 characters. Leave empty to keep the current password.
+                </p>
+              </div>
             </>
           )}
           {userType === 'supervisor' && (
