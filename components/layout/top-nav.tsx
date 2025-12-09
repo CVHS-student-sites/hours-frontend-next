@@ -1,10 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Settings, LogOut } from "lucide-react"
+import { Settings, LogOut, ChevronDown } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
 
@@ -15,7 +16,7 @@ interface TopNavProps {
 export function TopNav({ userRole }: TopNavProps) {
   const { user, logout } = useAuth()
   const router = useRouter()
-
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const actualRole = user?.role 
 
@@ -88,12 +89,13 @@ export function TopNav({ userRole }: TopNavProps) {
         <div className="flex items-center space-x-2 lg:space-x-0">
           {/* Show profile dropdown for students and supervisors */}
           {(actualRole === 'student' || actualRole === 'supervisor') && (
-            <DropdownMenu>
+            <DropdownMenu onOpenChange={setIsDropdownOpen}>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button variant="ghost" className="relative h-8 rounded-full flex items-center gap-1 px-2 focus-visible:ring-0 focus-visible:ring-offset-0">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] text-white">{getInitials()}</AvatarFallback>
                   </Avatar>
+                  <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

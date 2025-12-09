@@ -80,7 +80,7 @@ export function SupervisorSelector({
     }
 
     setIsLoading(true)
-    
+
     const searchSupervisors = async () => {
       try {
         const response = await apiClient.get(`/supervisor/search?q=${encodeURIComponent(searchTerm)}&limit=50`)

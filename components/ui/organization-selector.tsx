@@ -54,7 +54,7 @@ export function OrganizationSelector({
 
     const loadPopularOrganizations = async () => {
       if (allOrganizations.length > 0) return
-      
+
       try {
         setIsLoading(true)
         const response = await apiClient.get("/api/organizations/popular?limit=50")
@@ -66,13 +66,13 @@ export function OrganizationSelector({
         console.error("Failed to load popular organizations:", err)
         // Fallback to static list
         setAllOrganizations([
-          
+
         ])
       } finally {
         setIsLoading(false)
       }
     }
-    
+
     loadPopularOrganizations()
   }, [allOrganizations.length, availableOrganizations])
 
@@ -84,7 +84,7 @@ export function OrganizationSelector({
     }
 
     const searchTerm = organizationSearch.trim()
-    
+
     if (!searchTerm) {
       // When search is cleared, reload popular organizations
       const reloadPopular = async () => {
@@ -105,7 +105,7 @@ export function OrganizationSelector({
     }
 
     setIsLoading(true)
-    
+
     const searchOrganizations = async () => {
       try {
         const response = await apiClient.get(`/organizations/search?q=${encodeURIComponent(searchTerm)}&limit=50`)
