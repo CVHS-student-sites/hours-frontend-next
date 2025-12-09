@@ -56,7 +56,7 @@ export function ApprovalQueueEntry({
             </div>
             <div className="text-right">
               <div className="text-lg font-bold text-[#0084ff]">{entry.hours}h</div>
-              <p className="text-xs text-muted-foreground">{new Date(entry.date).toLocaleDateString()}</p>
+              <p className="text-xs text-muted-foreground">Date of the event: {new Date(entry.date).toLocaleDateString()}</p>
             </div>
           </div>
           <p className="text-sm text-muted-foreground text-pretty mb-3">{entry.description}</p>
