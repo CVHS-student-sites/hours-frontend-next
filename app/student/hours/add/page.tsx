@@ -6,13 +6,17 @@ import { useState } from "react"
 import { AppShell } from "@/components/layout/app-shell"
 import { PageHeader } from "@/components/layout/page-header"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { OrganizationSelector } from "@/components/ui/organization-selector"
-import { SupervisorSelector } from "@/components/ui/supervisor-selector"
-import type { Supervisor, Organization } from "@/types/api"
+import { AllOrganizationsSelector } from "@/components/ui/all-organizations-selector"
+
+interface Organization {
+  id: string
+  name: string
+  verified?: boolean
+}
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -28,50 +32,11 @@ export default function AddHoursPage() {
   const [date, setDate] = useState<Date>()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hours, setHours] = useState("")
-  const [selectedSupervisor, setSelectedSupervisor] = useState<Supervisor | null>(null)
-  const [availableOrganizations, setAvailableOrganizations] = useState<Organization[]>([])
-  const [loadingOrganizations, setLoadingOrganizations] = useState(false)
-  const [selectedOrganization, setSelectedOrganization] = useState<{id: string, name: string, isNew?: boolean} | null>(null)
+  const [supervisorEmail, setSupervisorEmail] = useState("")
+  const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null)
   const [description, setDescription] = useState("")
   const [error, setError] = useState("")
 
-  const handleSupervisorChange = async (supervisor: Supervisor | null) => {
-    console.log("handleSupervisorChange called with:", supervisor)
-    setSelectedSupervisor(supervisor)
-    setSelectedOrganization(null)
-    setAvailableOrganizations([])
-    
-    if (!supervisor) {
-      return
-    }
-    
-    console.log("Supervisor id:", supervisor.id)
-    setLoadingOrganizations(true)
-    setError("")
-    try {
-      const response = await apiClient.get(`/student/supervisor-organizations?supervisorId=${supervisor.id}`)
-      console.log("Supervisor organizations response:", response)
-      
-      if (response.success && response.data) {
-        // Map _id to id for the OrganizationSelector
-        const mappedOrganizations = response.data.map((org: any) => ({
-          id: org._id || org.id,
-          name: org.name,
-          verified: org.isActive || false
-        }))
-        console.log("Mapped organizations:", mappedOrganizations)
-        setAvailableOrganizations(mappedOrganizations)
-      } else {
-        console.error("Failed to fetch organizations:", response)
-        setError("No organizations found for this supervisor")
-      }
-    } catch (err: any) {
-      setError("Failed to load supervisor's organizations")
-      console.error("Error loading organizations:", err)
-    } finally {
-      setLoadingOrganizations(false)
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -84,8 +49,16 @@ export default function AddHoursPage() {
       return
     }
 
-    if (!selectedSupervisor) {
-      setError("Please select a supervisor")
+    if (!supervisorEmail.trim()) {
+      setError("Please enter a supervisor email")
+      setIsSubmitting(false)
+      return
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(supervisorEmail.trim())) {
+      setError("Please enter a valid email address")
       setIsSubmitting(false)
       return
     }
@@ -100,8 +73,9 @@ export default function AddHoursPage() {
       const response = await apiClient.post("/student/submit-hour", {
         date: date.toISOString(),
         hours: parseFloat(hours),
+        organizationId: selectedOrganization.id,
         organizationName: selectedOrganization.name,
-        supervisorEmail: selectedSupervisor.email,
+        supervisorEmail: supervisorEmail.trim(),
         description: description,
       })
 
@@ -186,59 +160,33 @@ export default function AddHoursPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="supervisor">Supervisor *</Label>
-                <SupervisorSelector
-                  value={selectedSupervisor}
-                  onChange={handleSupervisorChange}
-                  disabled={isSubmitting}
-                  placeholder="Select your supervisor"
+                <Label htmlFor="supervisorEmail">Supervisor Email *</Label>
+                <Input
+                  id="supervisorEmail"
+                  type="email"
+                  placeholder="supervisor@example.com"
+                  value={supervisorEmail}
+                  onChange={(e) => setSupervisorEmail(e.target.value)}
                   required
+                  disabled={isSubmitting}
                 />
-                {selectedSupervisor && (
-                  <p className="text-xs text-muted-foreground">
-                    {selectedSupervisor.email}
-                  </p>
-                )}
+                <p className="text-xs text-muted-foreground">
+                  Enter your supervisor's email address. They will receive a notification to approve your hours.
+                </p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="organization">Organization *</Label>
-                {loadingOrganizations ? (
-                  <div className="flex items-center justify-center h-10 border rounded-md bg-muted/50">
-                    <div className="h-4 w-4 border-2 border-[#0084ff] border-t-transparent rounded-full animate-spin"></div>
-                    <span className="ml-2 text-sm text-muted-foreground">Loading organizations...</span>
-                  </div>
-                ) : !selectedSupervisor ? (
-                  <div className="flex items-center h-10 px-3 border rounded-md bg-muted/50">
-                    <span className="text-sm text-muted-foreground">Select a supervisor first</span>
-                  </div>
-                ) : availableOrganizations.length === 0 ? (
-                  <div className="flex flex-col h-auto min-h-10 px-3 py-2 border rounded-md bg-muted/50">
-                    <span className="text-sm text-muted-foreground">
-                      No organizations available for this supervisor
-                    </span>
-                    {selectedSupervisor && (
-                      <span className="text-xs text-muted-foreground mt-1">
-                        Selected: {selectedSupervisor.firstName} {selectedSupervisor.lastName} ({selectedSupervisor._id})
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  <OrganizationSelector
-                    value={selectedOrganization}
-                    onChange={setSelectedOrganization}
-                    disabled={isSubmitting || !selectedSupervisor}
-                    placeholder="Select organization"
-                    required
-                    allowAddNew={false}
-                    availableOrganizations={availableOrganizations}
-                  />
-                )}
-                {selectedSupervisor && availableOrganizations.length > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    Choose from {availableOrganizations.length} organization{availableOrganizations.length !== 1 ? 's' : ''} where {selectedSupervisor.firstName} supervises
-                  </p>
-                )}
+                <AllOrganizationsSelector
+                  value={selectedOrganization}
+                  onChange={setSelectedOrganization}
+                  disabled={isSubmitting}
+                  placeholder="Select organization"
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  Select the organization where you performed your service.
+                </p>
               </div>
 
               <div className="space-y-2">
