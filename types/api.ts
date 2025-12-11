@@ -65,6 +65,7 @@ export interface Student {
     contactPhone?: string;
     isActive: boolean;
     supervisors: string[];
+    totalApprovedHours?: number;
     createdAt: string;
     updatedAt: string;
   }

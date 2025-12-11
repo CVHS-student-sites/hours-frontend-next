@@ -12,29 +12,29 @@ import { getSupervisorInitials, getSupervisorName, getOrganizationName, getTimeA
 import { exportSupervisedHoursToCSV } from '@/lib/utils/supervisor-export'
 export default function SupervisorDashboard() {
   const { user } = useAuth()
-  const { 
-    supervisor, 
-    pendingHours, 
+  const {
+    supervisor,
+    pendingHours,
     pendingHoursPagination,
     pendingHoursActions,
-    allHours, 
+    allHours,
     allHoursPagination,
     allHoursActions,
-    loading, 
-    error, 
-    updateHourStatus, 
-    deleteHour, 
-    refetch 
+    loading,
+    error,
+    updateHourStatus,
+    deleteHour,
+    refetch
   } = useSupervisorDashboard()
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-  
+
   // Connect search and filters to pagination
   const handleSearchChange = (value: string) => {
     setSearchTerm(value)
     allHoursActions.setSearch(value)
   }
-  
+
   const handleStatusChange = (value: string) => {
     setStatusFilter(value)
     allHoursActions.setFilters({ status: value === 'all' ? {} : { status: value } })
@@ -56,20 +56,20 @@ export default function SupervisorDashboard() {
             <TabsTrigger value="all">All Hours</TabsTrigger>
           </TabsList>
           <TabsContent value="queue">
-            <ApprovalQueueTab 
-              pendingHours={pendingHours} 
-              selectedEntries={actions.selectedEntries} 
-              isSubmitting={actions.isSubmitting} 
-              bulkAction={actions.bulkAction} 
-              rejectionReason={actions.rejectionReason} 
-              onSelectEntry={actions.handleSelectEntry} 
-              onSelectAll={actions.handleSelectAll} 
-              onBulkApprove={actions.handleBulkApprove} 
-              onBulkReject={actions.handleBulkReject} 
-              onIndividualApprove={actions.handleIndividualApprove} 
-              onIndividualReject={actions.handleIndividualReject} 
-              setBulkAction={actions.setBulkAction} 
-              setRejectionReason={actions.setRejectionReason} 
+            <ApprovalQueueTab
+              pendingHours={pendingHours}
+              selectedEntries={actions.selectedEntries}
+              isSubmitting={actions.isSubmitting}
+              bulkAction={actions.bulkAction}
+              rejectionReason={actions.rejectionReason}
+              onSelectEntry={actions.handleSelectEntry}
+              onSelectAll={actions.handleSelectAll}
+              onBulkApprove={actions.handleBulkApprove}
+              onBulkReject={actions.handleBulkReject}
+              onIndividualApprove={actions.handleIndividualApprove}
+              onIndividualReject={actions.handleIndividualReject}
+              setBulkAction={actions.setBulkAction}
+              setRejectionReason={actions.setRejectionReason}
               getTimeAgo={getTimeAgo}
               pagination={pendingHoursPagination}
               onPageChange={pendingHoursActions.setPage}
@@ -77,19 +77,19 @@ export default function SupervisorDashboard() {
             />
           </TabsContent>
           <TabsContent value="all">
-            <AllHoursFilters 
-              searchTerm={searchTerm} 
-              onSearchChange={handleSearchChange} 
-              statusFilter={statusFilter} 
-              onStatusChange={handleStatusChange} 
-              onExport={() => exportSupervisedHoursToCSV(allHours)} 
-              hasData={allHours.length > 0} 
+            <AllHoursFilters
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+              statusFilter={statusFilter}
+              onStatusChange={handleStatusChange}
+              onExport={() => exportSupervisedHoursToCSV(allHours)}
+              hasData={allHours.length > 0}
             />
-            <AllHoursTable 
-              hours={allHours} 
-              searchTerm={searchTerm} 
-              statusFilter={statusFilter} 
-              onEditClick={(hour) => { actions.setEditingHour(hour); actions.setEditStatus(hour.status); actions.setEditRejectionReason('') }} 
+            <AllHoursTable
+              hours={allHours}
+              searchTerm={searchTerm}
+              statusFilter={statusFilter}
+              onEditClick={(hour) => { actions.setEditingHour(hour); actions.setEditStatus(hour.status); actions.setEditRejectionReason('') }}
               onDeleteClick={actions.setDeleteConfirmHour}
               pagination={allHoursPagination}
               onPageChange={allHoursActions.setPage}

@@ -112,7 +112,7 @@ export const supervisorApi = {
   getStatistics: () => apiClient.get<SupervisorStatistics>('/supervisor/statistics'),
   getPendingHours: (params?: PaginationParams) => apiClient.get<PaginatedResponse<Hour>>('/supervisor/pending-hours', params),
   getHours: (params?: PaginationParams) => apiClient.get<PaginatedResponse<Hour>>('/supervisor/hours', params),
-  
+
   updateHourStatus: (id: string, status: 'approved' | 'rejected', rejectionReason?: string) =>
     apiClient.put(`/supervisor/hours/${id}/status`, { status, rejectionReason }),
   bulkUpdateHours: (data: HourBulkUpdateInput) =>

@@ -9,16 +9,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, Save, Shield, Building2 } from "lucide-react"
+import { OrganizationSelector } from "@/components/ui/organization-selector"
+import { Loader2, Save, Shield, Building2, ArrowLeft } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSupervisorDashboard } from "@/hooks/useSupervisorDashboard"
 import toast from "react-hot-toast"
 import { apiClient } from "@/lib/api-client"
+import { useRouter } from "next/navigation"
 
 export default function SupervisorSettingsPage() {
   const { user, updateUser } = useAuth()
   const { supervisor, loading, error, refetch } = useSupervisorDashboard()
-  
+  const router = useRouter()
+
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isResettingPassword, setIsResettingPassword] = useState(false)
@@ -27,7 +30,7 @@ export default function SupervisorSettingsPage() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
-  const [selectedOrganizations, setSelectedOrganizations] = useState<Array<{id: string, name: string}>>([])
+  const [selectedOrganizations, setSelectedOrganizations] = useState<Array<{id: string, name: string, verified?: boolean}>>([])
 
   // Initialize form values when data loads
   useEffect(() => {
@@ -45,14 +48,16 @@ export default function SupervisorSettingsPage() {
       if (supervisor.organizations && Array.isArray(supervisor.organizations)) {
         const orgs = supervisor.organizations.map((org: any) => ({
           id: typeof org === 'string' ? org : org._id,
-          name: typeof org === 'string' ? org : org.name
+          name: typeof org === 'string' ? org : org.name,
+          verified: typeof org === 'object' ? org.verified : false
         }))
         setSelectedOrganizations(orgs)
       } else if (supervisor.organizationNames && Array.isArray(supervisor.organizationNames)) {
         // Fallback: create organization objects from names
         const orgs = supervisor.organizationNames.map((name: string, index: number) => ({
           id: `org-${index}`,
-          name: name
+          name: name,
+          verified: false
         }))
         setSelectedOrganizations(orgs)
       }
@@ -77,9 +82,10 @@ export default function SupervisorSettingsPage() {
       const updateData: any = {
         firstName,
         lastName,
-        email
+        email,
+        organizations: selectedOrganizations.map(org => org.id)
       }
-      
+
       const response = await apiClient.put('/supervisor/profile', updateData)
 
       if (response.success) {
@@ -157,6 +163,14 @@ export default function SupervisorSettingsPage() {
   return (
     <AppShell userRole="supervisor">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <Button
+          variant="ghost"
+          onClick={() => router.push('/supervisor/dashboard')}
+          className="mb-4 -ml-2"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
         <PageHeader title="Profile Settings" subtitle="Manage your account information and preferences" />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -234,28 +248,51 @@ export default function SupervisorSettingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="organizations">Organization{selectedOrganizations.length > 1 ? 's' : ''}</Label>
-                  
-                  <div className="space-y-1">
+                  <Label>Organizations</Label>
+                  <div className="space-y-2">
                     {selectedOrganizations.map((org, index) => (
-                      <Input 
-                        key={index}
-                        value={org.name} 
-                        disabled 
-                        className="bg-muted/50" 
-                      />
+                      <div key={index} className="flex items-center justify-between p-2 border rounded-md">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{org.name}</span>
+                          {org.verified && (
+                            <span className="text-xs text-green-600">✓</span>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const updatedOrgs = selectedOrganizations.filter((_, i) => i !== index)
+                            setSelectedOrganizations(updatedOrgs)
+                          }}
+                          disabled={!isEditing}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     ))}
-                    <p className="text-xs text-muted-foreground pt-1">
-                      To change your organizations, please contact an administrator.
-                    </p>
+                    <OrganizationSelector
+                      value={null}
+                      onChange={(org) => {
+                        if (org) {
+                          const orgExists = selectedOrganizations.some((existingOrg) => existingOrg.id === org.id)
+                          if (!orgExists) {
+                            setSelectedOrganizations([...selectedOrganizations, org])
+                          }
+                        }
+                      }}
+                      placeholder="Add organization..."
+                      disabled={!isEditing}
+                      allowAddNew={false}
+                    />
                   </div>
                 </div>
 
                 <div className="flex justify-end space-x-2">
                   {isEditing ? (
                     <>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         onClick={() => {
                           setIsEditing(false)
                           // Reset to original values
@@ -268,8 +305,25 @@ export default function SupervisorSettingsPage() {
                             setFirstName(supervisor.firstName || "")
                             setLastName(supervisor.lastName || "")
                             setEmail(supervisor.email || "")
+
+                            // Reset organizations
+                            if (supervisor.organizations && Array.isArray(supervisor.organizations)) {
+                              const orgs = supervisor.organizations.map((org: any) => ({
+                                id: typeof org === 'string' ? org : org._id,
+                                name: typeof org === 'string' ? org : org.name,
+                                verified: typeof org === 'object' ? org.verified : false
+                              }))
+                              setSelectedOrganizations(orgs)
+                            } else if (supervisor.organizationNames && Array.isArray(supervisor.organizationNames)) {
+                              const orgs = supervisor.organizationNames.map((name: string, index: number) => ({
+                                id: `org-${index}`,
+                                name: name,
+                                verified: false
+                              }))
+                              setSelectedOrganizations(orgs)
+                            }
                           }
-                        }} 
+                        }}
                         disabled={isSaving}
                       >
                         Cancel

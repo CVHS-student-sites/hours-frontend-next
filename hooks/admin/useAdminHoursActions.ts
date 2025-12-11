@@ -69,6 +69,10 @@ export function useAdminHoursActions(state: any) {
         toast.success('Hour entry updated successfully')
         state.setEditingHour(null)
         state.setEditRejectionReason('')
+        // If we're viewing user hours in a popup, refetch that data as well
+        if (state.selectedUserId && state.refetch) {
+          await state.refetch()
+        }
       }
     } catch (err: any) {
       toast.error(err.message)
@@ -84,6 +88,10 @@ export function useAdminHoursActions(state: any) {
       if (success) {
         toast.success('Hour entry deleted successfully')
         state.setDeleteConfirmHour(null)
+        // If we're viewing user hours in a popup, refetch that data as well
+        if (state.selectedUserId && state.refetch) {
+          await state.refetch()
+        }
       }
     } catch (err: any) {
       toast.error(err.message)
@@ -107,6 +115,10 @@ export function useAdminHoursActions(state: any) {
         toast.success('Hour entry updated successfully')
         state.setIsEditHourDialogOpen(false)
         state.setEditingHourForEdit(null)
+        // If we're viewing user hours in a popup, refetch that data as well
+        if (state.selectedUserId && state.refetch) {
+          await state.refetch()
+        }
       }
     } catch (err: any) {
       toast.error(err.message)

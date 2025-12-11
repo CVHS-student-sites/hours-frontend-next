@@ -108,10 +108,14 @@ export function OrganizationsTab({
                     </DropdownMenu>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div>
                     <div className="text-muted-foreground">Supervisors</div>
                     <div className="font-medium">{typeof org.supervisors === 'object' ? org.supervisors.length : 'Loading...'}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Approved Hours</div>
+                    <div className="font-medium text-green-600">{org.totalApprovedHours || 0}h</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">Created</div>

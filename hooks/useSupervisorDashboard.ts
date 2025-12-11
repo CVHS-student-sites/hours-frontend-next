@@ -12,7 +12,7 @@ export function useSupervisorDashboard() {
   // Create stable fetch functions for hours
   const fetchPendingHours = useCallback((params: any) => supervisorApi.getPendingHours(params), [])
   const fetchAllHours = useCallback((params: any) => supervisorApi.getHours(params), [])
-  
+
   // Use pagination for hours
   const pendingHoursPagination = usePagination<Hour>(fetchPendingHours)
   const allHoursPagination = usePagination<Hour>(fetchAllHours)
@@ -85,7 +85,7 @@ export function useSupervisorDashboard() {
     supervisor,
     loading,
     error,
-    
+
     // Pending Hours with pagination
     pendingHours: pendingHoursPagination.data,
     pendingHoursPagination: pendingHoursPagination.pagination,
@@ -99,7 +99,7 @@ export function useSupervisorDashboard() {
       resetFilters: pendingHoursPagination.resetFilters,
       refetch: pendingHoursPagination.refetch
     },
-    
+
     // All Hours with pagination
     allHours: allHoursPagination.data,
     allHoursPagination: allHoursPagination.pagination,
@@ -113,7 +113,7 @@ export function useSupervisorDashboard() {
       resetFilters: allHoursPagination.resetFilters,
       refetch: allHoursPagination.refetch
     },
-    
+
     // Actions
     updateHourStatus,
     deleteHour,

@@ -39,7 +39,7 @@ export function StatisticsTab({ overview, students, supervisors, hours, organiza
 
   // Use overview data for hours by graduation year if available, otherwise fallback to calculation
   const hoursByGraduatingYear = overview?.hoursByGraduatingYear || []
-  const sortedClasses = hoursByGraduatingYear.length > 0 
+  const sortedClasses = hoursByGraduatingYear.length > 0
     ? hoursByGraduatingYear.map(item => [`Class of ${item.year}`, {
         year: item.year,
         students: item.studentCount,
