@@ -55,7 +55,7 @@ export function useAdminData() {
     try {
       const response = await adminApi.getTopStudents(5)
       if (response?.success && response?.data) {
-        setTopStudents(response.data.data)
+        setTopStudents(response.data)
       }
     } catch (err: any) {
       setOverviewError(err.message || 'Failed to load top students data')
