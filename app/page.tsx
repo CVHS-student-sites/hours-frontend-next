@@ -122,7 +122,7 @@ export default function LandingPage() {
                   ) : (
                     <Link href="/register">
                       <Users className="mr-2 h-5 w-5" />
-                      Get Started
+                      Register
                     </Link>
                   )}
                 </Button>
