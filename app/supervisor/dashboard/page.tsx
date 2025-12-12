@@ -37,7 +37,7 @@ export default function SupervisorDashboard() {
 
   const handleStatusChange = (value: string) => {
     setStatusFilter(value)
-    allHoursActions.setFilters({ status: value === 'all' ? {} : { status: value } })
+    allHoursActions.setFilters({ status: value })
   }
   const actions = useSupervisorActions({ updateHourStatus, deleteHour, refetch, pendingHours })
   const stats = useSupervisorStats(allHours, pendingHours)
