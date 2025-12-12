@@ -20,7 +20,13 @@ export function useAdminData() {
   const fetchPendingSupervisors = useCallback((params: any) => adminApi.getPendingSupervisors(params), [])
   const fetchHours = useCallback((params: any) => adminApi.getHours(params), [])
   const fetchOrganizations = useCallback((params: any) => adminApi.getOrganizations(params), [])
-  const fetchAdmins = useCallback((params: any) => adminApi.getAdmins(params), [])
+  const fetchAdmins = useCallback((params: any) => {
+    // Only fetch admins if user is superadmin to prevent 401/403 auto-logout
+    if (user?.role !== 'superadmin') {
+      return Promise.resolve({ success: true, data: [], pagination: { page: 1, limit: 25, total: 0, totalPages: 0, hasNext: false, hasPrev: false } })
+    }
+    return adminApi.getAdmins(params)
+  }, [user?.role])
   
   // Use pagination hooks for each data type
   const studentsPagination = usePagination<Student>(fetchStudents)

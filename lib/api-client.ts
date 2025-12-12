@@ -29,7 +29,9 @@ class ApiClient {
     if (typeof window === 'undefined') return;
     localStorage.setItem('auth_token', token);
     // Also set as HTTP-only cookie for middleware access
-    document.cookie = `auth_token=${token}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=strict`;
+    const isSecure = window.location.protocol === 'https:';
+    const secureFlag = isSecure ? '; secure' : '';
+    document.cookie = `auth_token=${token}; path=/; max-age=${30 * 24 * 60 * 60}${secureFlag}; samesite=strict`;
   }
 
   private removeToken(): void {
@@ -200,7 +202,9 @@ class ApiClient {
   login(token: string, userRole?: string): void {
     this.setToken(token);
     if (userRole && typeof window !== 'undefined') {
-      document.cookie = `user_role=${userRole}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=strict`;
+      const isSecure = window.location.protocol === 'https:';
+      const secureFlag = isSecure ? '; secure' : '';
+      document.cookie = `user_role=${userRole}; path=/; max-age=${30 * 24 * 60 * 60}${secureFlag}; samesite=strict`;
     }
   }
 

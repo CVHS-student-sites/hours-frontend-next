@@ -47,7 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setToken(storedToken);
           // Set user role cookie for middleware
           if (typeof window !== 'undefined') {
-            document.cookie = `user_role=${response.data.role}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=strict`;
+            const isSecure = window.location.protocol === 'https:';
+            const secureFlag = isSecure ? '; secure' : '';
+            document.cookie = `user_role=${response.data.role}; path=/; max-age=${30 * 24 * 60 * 60}${secureFlag}; samesite=strict`;
           }
         } else {
           console.log("Auth failed - response.success:", response.success, "response.data:", response.data);

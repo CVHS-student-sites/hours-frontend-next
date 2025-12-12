@@ -1,13 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 import { useAuth } from '@/contexts/AuthContext'
 import { authApi } from '@/lib/api/endpoints'
-import { apiClient } from '@/lib/api-client'
 import toast from 'react-hot-toast'
 import type { LoginInput } from '@/lib/api/schemas/auth'
 
 async function handleLoginSuccess(token: string, login: any, defaultPath: string) {
   localStorage.setItem('auth_token', token)
-  apiClient.login(token)
 
   try {
     const userResponse = await authApi.checkAuth()
