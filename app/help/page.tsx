@@ -122,7 +122,8 @@ export default function HelpPage() {
                     >
                       spral
                     </Link>{" "}
-                    <span className="text-muted-foreground/70">(spursh deshpande)</span>
+                    <span className="text-muted-foreground/70">(spursh deshpande),</span>
+                      {" "}in collaboration with BP Solutions
                   </p>
                 </div>
               </div>
