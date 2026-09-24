@@ -298,6 +298,7 @@ class ApiClient {
     email: string;
     password: string;
     organizationIds: string[];
+    newOrganizationNames: string[];
   }): Promise<ApiResponse> {
     return this.post('/admin/supervisors/create', data);
   }

@@ -221,6 +221,7 @@ export function useAdminUserHandlers(state: any) {
     email: string
     password: string
     organizationIds: string[]
+    newOrganizationNames: string[]
   }) => {
     state.setIsProcessing(true)
 

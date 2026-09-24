@@ -10,6 +10,13 @@ import { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import toast from 'react-hot-toast'
 
+interface SelectedOrganization {
+  id: string
+  name: string
+  verified?: boolean
+  isNew?: boolean
+}
+
 interface CreateSupervisorDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -19,6 +26,7 @@ interface CreateSupervisorDialogProps {
     email: string
     password: string
     organizationIds: string[]
+    newOrganizationNames: string[]
   }) => Promise<void>
   isProcessing: boolean
 }
@@ -29,7 +37,7 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
     lastName: '',
     email: '',
     password: '',
-    selectedOrganizations: [] as Array<{ id: string; name: string; verified: boolean }>,
+    selectedOrganizations: [] as SelectedOrganization[],
   })
 
   // Reset form when dialog opens
@@ -83,7 +91,9 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
       lastName: formData.lastName,
       email: formData.email,
       password: formData.password,
-      organizationIds: formData.selectedOrganizations.map((org) => org.id),
+      // Orgs added via "Add New Organization" only have a placeholder id, so send their names instead
+      organizationIds: formData.selectedOrganizations.filter((org) => !org.isNew).map((org) => org.id),
+      newOrganizationNames: formData.selectedOrganizations.filter((org) => org.isNew).map((org) => org.name),
     })
   }
 
@@ -91,8 +101,10 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const addOrganization = (org: { id: string; name: string; verified: boolean }) => {
-    const exists = formData.selectedOrganizations.some((o) => o.id === org.id)
+  const addOrganization = (org: SelectedOrganization) => {
+    const exists = formData.selectedOrganizations.some(
+      (o) => o.id === org.id || (org.isNew && o.name.toLowerCase() === org.name.toLowerCase())
+    )
     if (!exists) {
       setFormData((prev) => ({
         ...prev,
@@ -168,6 +180,9 @@ export function CreateSupervisorDialog({ open, onOpenChange, onCreate, isProcess
                   {formData.selectedOrganizations.map((org) => (
                     <Badge key={org.id} variant="secondary" className="flex items-center gap-1">
                       {org.name}
+                      {org.isNew && (
+                        <span className="text-xs bg-[#0084ff]/10 text-[#0084ff] px-1.5 py-0.5 rounded">New</span>
+                      )}
                       <button
                         onClick={() => removeOrganization(org.id)}
                         disabled={isProcessing}

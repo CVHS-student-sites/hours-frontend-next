@@ -98,6 +98,7 @@ export function useAdminSupervisorActions(refetch: () => Promise<void>, setError
     email: string
     password: string
     organizationIds: string[]
+    newOrganizationNames: string[]
   }) => {
     try {
       const response = await apiClient.createSupervisorManually(data)
